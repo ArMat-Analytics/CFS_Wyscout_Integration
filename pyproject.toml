@@ -1,0 +1,77 @@
+[project]
+name = "contextual-football-scouting"
+version = "0.1.0"
+requires-python = ">=3.10"
+
+# ---------------------------------------------------------------------------
+# Ruff — linting
+# ---------------------------------------------------------------------------
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+extend-exclude = [
+    ".venv",
+    "venv",
+    "node_modules",
+    "__pycache__",
+    "*.ipynb",
+    "webapp/frontend",
+]
+
+[tool.ruff.lint]
+select = ["E", "F", "W"]
+# Ignore rules that conflict with the existing codebase style:
+#   E501  — line too long (many existing lines exceed 120)
+#   E402  — module-level import not at top (H3/xepv.py sys.path hack)
+#   E701  — multiple statements on one line (colon)
+#   E702  — multiple statements on one line (semicolon)
+#   E712  — comparison to True/False (common pandas idiom: df[col] == False)
+#   E721  — do not compare types, use isinstance()
+#   E741  — ambiguous variable name (existing code uses `l` in list comps)
+#   W291–W293 — trailing/blank-line whitespace (pervasive in existing files)
+#   F401  — unused imports (existing scripts import for side effects)
+#   F541  — f-string without placeholders
+#   F841  — unused variable assignment
+ignore = [
+    "E501", "E402", "E701", "E702", "E712", "E721", "E731", "E741",
+    "W291", "W292", "W293",
+    "F401", "F541", "F841",
+]
+
+# ---------------------------------------------------------------------------
+# Pytest
+# ---------------------------------------------------------------------------
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+# ---------------------------------------------------------------------------
+# Coverage
+# ---------------------------------------------------------------------------
+[tool.coverage.run]
+source = [
+    "H1_Space_Control_and_Value/src",
+    "H2_Decision_Quality/src",
+    "H4_Player_Similarity/src",
+]
+omit = [
+    # Dashboard and visualizers
+    "*/dashboard.py",
+    "*/viz.py",
+    # Validation scripts
+    "*/validation.py",
+    "*/validate_receiver_resolution.py",
+    # Scrapers
+    "EURO2024_Transfermarkt_Scraper/*",
+    # ETL and ML pipeline scripts
+    "*/epv_pipeline.py",
+    "*/corpus.py",
+    "*/features.py",
+    "*/xpass.py",
+    "*/aggregation.py",
+    "*/directional_gravity.py",
+    "*/hull_metrics.py",
+    "*/line_breaker.py",
+    "*/player_totals.py",
+]
+

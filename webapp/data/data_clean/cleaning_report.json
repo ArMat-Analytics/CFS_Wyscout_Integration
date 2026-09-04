@@ -1,0 +1,57 @@
+{
+  "data_dir": "Contextual-Football-Scouting/webapp/data/data_raw",
+  "output_dir": "Contextual-Football-Scouting/webapp/data/data_clean",
+  "truth_file": "Contextual-Football-Scouting/webapp/data/data_raw/player_totals_distances_roles.csv",
+  "reference_date": "2024-06-14",
+  "rows": {
+    "truth_in": 357,
+    "truth_clean": 357,
+    "truth_with_team_id": 357,
+    "player_data_in": 1020,
+    "player_data_clean": 357,
+    "team_data_in": 24,
+    "team_data_clean": 24,
+    "team_matches_in": 51,
+    "team_matches_clean": 51,
+    "bridge_rows": 357
+  },
+  "deduplicated_rows": {
+    "truth": 0,
+    "player_data": 0,
+    "team_data": 0,
+    "team_matches": 0
+  },
+  "url_columns_removed": {
+    "truth": [],
+    "player_data": [
+      "profile_relative_url",
+      "profile_url",
+      "portrait_url"
+    ],
+    "team_data": [
+      "team_relative_url",
+      "fixtures_relative_url",
+      "fixtures_url",
+      "squad_relative_url",
+      "squad_url"
+    ],
+    "team_matches": [
+      "fixtures_url",
+      "home_team_relative_url",
+      "away_team_relative_url",
+      "coach_relative_url",
+      "match_report_relative_url",
+      "match_report_url"
+    ]
+  },
+  "bridge": {
+    "matched": 357,
+    "unmatched": 0,
+    "unresolved_examples": []
+  },
+  "age_recalculation": {
+    "enabled": true,
+    "updated": 0,
+    "skipped": 0
+  }
+}

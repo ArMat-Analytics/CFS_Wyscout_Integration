@@ -1,0 +1,89 @@
+\documentclass[12pt,a4paper]{article}
+
+% --- Standard Packages ---
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{margin=2.0cm}
+\usepackage{graphicx} 
+\usepackage[absolute,overlay]{textpos}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{amsmath}
+
+% --- Document Information ---
+\title{\textbf{Project Proposal: Contextual Football Scouting}\\ \large Mitigating Team Bias via 360 Spatial Data Analysis}
+\author{Matteo Vezzoli \& Armando Mio}
+\date{April 2026}
+
+\begin{document}
+
+\begin{textblock*}{5cm}(10mm, 10mm) 
+    \includegraphics[width=6cm]{logo.png}
+\end{textblock*}
+
+\maketitle
+
+\section{Origin and Motivation}
+
+\subsection{Origin of the Topic}
+This project originates within the domain of Football Analytics and Scouting. This initiative stems from a fundamental observation: within the modern transfer market, clubs frequently overvalue players based solely on superficial statistical outputs. Frequently, these inflated metrics are a byproduct of the player operating within a dominant team structure rather than an accurate reflection of exceptional individual talent.
+
+\subsection{Personal Motivation}
+Motivated by a rigorous interest in data science, this project seeks to uncover the latent variables within a match. The primary focus lies in capturing elements often obscured by standard statistics, such as optimal spatial positioning and effective decision-making under high-pressure scenarios. The overarching objective is to leverage advanced data analytics to identify undervalued talent, particularly those currently operating within less prominent clubs.
+
+\section{The Business Case and Industry Relevance}
+
+\subsection{What is the Challenge?}
+Currently, the most significant challenge in football scouting is the phenomenon of "Team Bias". It remains highly difficult to objectively evaluate a player without the compounding influence of their respective team's tactical system. For instance, a midfielder operating within a possession-dominant team will inherently register a high pass completion rate. However, if these passes are executed under minimal pressure and lack complexity, they do not necessarily correlate with elite passing proficiency. The fundamental challenge, therefore, lies in isolating a player's intrinsic technical ability from the systemic advantages provided by a dominant squad.
+
+\subsection{Relevance and What Will Be Revealed}
+This issue is highly relevant as a majority of clubs continue to rely heavily on decontextualized "event data", such as aggregate passes or goals. This project aims to quantify and demonstrate a player's spatial intelligence. By analyzing opponent positioning during specific actions, it becomes possible to distinguish between players who genuinely excel under pressure and those who merely benefit from a favorable tactical framework.
+
+\subsection{Economic and Business Justification}
+The football industry is an environment where erroneous recruitment decisions can result in substantial financial losses. This project offers a clear economic rationale through two primary avenues:
+\begin{itemize}
+    \item \textbf{Value Arbitrage (Cost Reduction):} Demonstrating that a cost-effective player exhibits similar tactical decision-making to a high-profile asset allows clubs to achieve significant financial savings.
+    \item \textbf{Operational Efficiency:} Rather than relying on scouts to manually review extensive video footage, this analytical tool can rapidly filter top candidates using quantitative data.
+\end{itemize}
+
+\section{Project Objectives, Hypotheses and Iterative Scope}
+
+\subsection{The main concern that arises}
+The primary challenge inherent in this project is twofold. Firstly, there is the technical complexity associated with processing spatial 360 data, which is significantly more intricate than traditional event logs. Secondly, and more critically, the fundamental difficulty resides in engineering metrics that are sophisticated, precise, and contextually relevant to football. The task extends beyond mere programming; it requires ensuring that the mathematical models accurately reflect on-pitch dynamics. Consequently, an iterative approach will be adopted: initiating with robust and feasible metrics, and subsequently expanding and refining the analysis to guarantee that each indicator yields actionable scouting insights.
+
+\subsection{Main Objective}
+The main goal is the development of a scouting platform that evaluates and ranks players based on contextual decision-making, thereby mitigating the "Team Bias" that frequently compromises statistical comparisons.
+
+\subsection{Specific Objectives and Hypotheses}
+The research framework is structured around four primary hypotheses, progressing from spatial analysis to comprehensive player comparison:
+
+\begin{itemize}
+    \item \textbf{Hypothesis 1 (Space Control and Value):} It is posited that a player's quality is measurable by their spatial influence on the pitch. The methodology will explore the use of Convex Hulls to quantify defensive territorial control and evaluate an attacker's ability to penetrate it. Utilizing Expected Possession Value (EPV), the objective is to identify "Line Breakers", who are players capable of executing passes that bypass defensive structures and significantly elevate the probability of scoring.
+    \item \textbf{Hypothesis 2 (Contextual Decision-Making):} Aggregate pass completion rates lack analytical value when devoid of contextual factors. This phase will analyze "Passing under Pressure" by measuring the proximity of defending players. The aim is to assess decision-making efficacy: specifically, whether the player selected the optimal passing lane relative to immediate defensive danger. This differentiation facilitates the separation of players who default to conservative actions from those who exhibit tactical astuteness under high cognitive load.
+    \item \textbf{Hypothesis 3 (Off-Ball Movements):} The vast majority of a player's on-pitch activity occurs out of possession. This investigation seeks to identify players executing high-value attacking runs that are ultimately not capitalized upon by teammates. Analyzing 360-degree spatial frames enables the detection of players who consistently occupy and attack dangerous areas, thereby quantifying a latent dimension of offensive contribution regardless of ball reception.
+    \item \textbf{Hypothesis 4 (Player Similarity):} Following the derivation of these novel metrics, players will be compared on their intrinsic "Spatial DNA", a behavioral playing-style profile assembled from the indicators of the three earlier hypotheses, rather than on nominal positional labels. The original intent was to group players into archetypes via clustering (e.g., K-Means); on a single-tournament sample this proved degenerate, as cross-role clustering merely rediscovers the positional labels and within-role pools are too small for stable groups. The objective is therefore pursued directly through a within-role similarity model, which ranks each player's closest stylistic matches inside his own role and is designed to identify cost-effective alternatives possessing comparable tactical intelligence to premium market assets.
+\end{itemize}
+
+\subsection{Justification of the Announced Objectives}
+These objectives are critical as they shift the analytical paradigm from descriptive to explanatory observations. By incorporating geometric and spatial context, it becomes possible to determine whether elite performance is a function of individual talent or systemic dominance. This methodology is proposed as the optimal approach for uncovering authentic value within a market frequently distorted by superficial metrics.
+
+\section{Proposed Technical Solution and Deliverables}
+
+\subsection{Data Sources}
+The project will rely on two primary data providers:
+\begin{itemize}
+    \item \textbf{StatsBomb Open Data:} Utilizing the 360-data from Euro 2024. 
+    \item \textbf{Transfermarkt:} Acquiring market value data to contextualize on-pitch performance against financial costs.
+\end{itemize}
+
+\subsection{Platform Prototype and Deliverables}
+The terminal deliverable will be an interactive web dashboard enabling end-users to:
+\begin{enumerate}
+    \item \textbf{Execute Player Comparisons:} Benchmark standard metrics alongside the newly formulated contextual indicators.
+    \item \textbf{Identify Similar Profiles:} Leverage the within-role similarity model to discover undervalued players based on verifiable on-pitch behavioral patterns, presenting each match's similarity score alongside the player's market value and age for a global read on his profile.
+    \item \textbf{Generate Scouting Reports:} Scope permitting, integrate an AI-driven module to translate complex data into concise, accessible reports detailing a player's spatial intelligence.
+\end{enumerate}
+
+\end{document}

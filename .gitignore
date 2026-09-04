@@ -1,0 +1,22 @@
+# Frontend
+frontend/node_modules/
+frontend/dist/
+
+# Backend
+backend/venv/
+backend/__pycache__/
+*.pyc
+.env
+
+# LaTeX build artifacts (paper compiles to docs/paper/Paper.pdf, kept; the rest regenerate)
+docs/paper/*.aux
+docs/paper/*.toc
+docs/paper/*.lof
+docs/paper/*.lot
+docs/paper/*.out
+docs/paper/*.bbl
+docs/paper/*.blg
+docs/paper/*.log
+docs/paper/*.fls
+docs/paper/*.fdb_latexmk
+docs/paper/*.synctex.gz

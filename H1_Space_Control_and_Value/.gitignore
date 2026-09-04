@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Notebook backups (do not commit local snapshots)
+*.ipynb.bak.*
+
+# Environments
+.venv/
+venv/
+env/
+.env
+
+# OS
+.DS_Store
+Thumbs.db
+.Rhistory
+
+# StatsBomb 360 frame caches (regenerable, multi-MB parquet files)
+data/cache/
+
+# Heavy intermediate event tables (regenerable from the pipeline)
+data/hull_events_raw.csv
+data/hull_events_with_epv.csv
+data/hull_events_lb.csv
+
+# IDE
+.vscode/
+.idea/
+*.swp

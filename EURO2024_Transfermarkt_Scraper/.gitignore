@@ -1,0 +1,14 @@
+# Python cache and bytecode
+__pycache__/
+**/__pycache__/
+*.py[cod]
+
+# Virtual environment
+.venv/
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Error outputs
+/data/errors/*.csv

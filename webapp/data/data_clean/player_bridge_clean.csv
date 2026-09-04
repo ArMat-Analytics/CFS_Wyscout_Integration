@@ -1,0 +1,358 @@
+truth_player_id,truth_player_name,truth_team_name,truth_team_id,truth_team_norm,truth_player_norm,tm_player_id,tm_player_name,tm_team_name,match_score,match_rule,status
+3943,Declan Rice,England,3299,england,declan rice,357662,Declan Rice,England,1.000,exact,matched
+3244,John Stones,England,3299,england,john stones,186590,John Stones,England,1.000,exact,matched
+3205,Kyle Walker,England,3299,england,kyle walker,95424,Kyle Walker,England,1.000,exact,matched
+5574,Toni Kroos,Germany,3262,germany,toni kroos,31909,Toni Kroos,Germany,1.000,exact,matched
+30714,Jude Bellingham,England,3299,england,jude bellingham,581678,Jude Bellingham,England,1.000,exact,matched
+6655,Fabián Ruiz Peña,Spain,3375,spain,fabian ruiz pena,350219,Fabián Ruiz,Spain,1.000,exact,matched
+4353,Aymeric Laporte,Spain,3375,spain,aymeric laporte,176553,Aymeric Laporte,Spain,1.000,exact,matched
+6765,Rodrigo Hernández Cascante,Spain,3375,spain,rodrigo hernandez cascante,357565,Rodri,Spain,1.000,exact,matched
+34526,Marc Guehi,England,3299,england,marc guehi,392757,Marc Guéhi,England,1.000,exact,matched
+4354,Phil Foden,England,3299,england,phil foden,406635,Phil Foden,England,1.000,exact,matched
+6704,Theo Bernard François Hernández,France,3377,france,theo bernard francois hernandez,339808,Theo Hernández,France,1.000,exact,matched
+3500,Granit Xhaka,Switzerland,3384,switzerland,granit xhaka,111455,Granit Xhaka,Switzerland,1.000,exact,matched
+5579,Joshua Kimmich,Germany,3262,germany,joshua kimmich,161056,Joshua Kimmich,Germany,1.000,exact,matched
+7787,Stefan de Vrij,Netherlands,3379,netherlands,stefan de vrij,111196,Stefan de Vrij,Netherlands,1.000,exact,matched
+3167,Antonio Rüdiger,Germany,3262,germany,antonio rudiger,86202,Antonio Rüdiger,Germany,1.000,exact,matched
+20016,Kléper Laveran Lima Ferreira,Portugal,3300,portugal,kleper laveran lima ferreira,14132,Pepe,Portugal,0.964,fuzzy,matched
+10481,Aurélien Djani Tchouaméni,France,3377,france,aurelien djani tchouameni,413112,Aurélien Tchouaméni,France,1.000,exact,matched
+5206,Rúben Santos Gato Alves Dias,Portugal,3300,portugal,ruben santos gato alves dias,258004,Rúben Dias,Portugal,1.000,exact,matched
+41092,Nuno Mendes,Portugal,3300,portugal,nuno mendes,616341,Nuno Mendes,Portugal,1.000,exact,matched
+17620,Marc Cucurella Saseta,Spain,3375,spain,marc cucurella saseta,284857,Marc Cucurella,Spain,1.000,exact,matched
+4445,Jules Koundé,France,3377,france,jules kounde,411975,Jules Koundé,France,1.000,exact,matched
+3961,N'Golo Kanté,France,3377,france,n golo kante,225083,N'Golo Kanté,France,1.000,exact,matched
+8519,Dayotchanculle Upamecano,France,3377,france,dayotchanculle upamecano,344695,Dayot Upamecano,France,0.940,token_subset,matched
+3669,Virgil van Dijk,Netherlands,3379,netherlands,virgil van dijk,139208,Virgil van Dijk,Netherlands,1.000,exact,matched
+17592,William Saliba,France,3377,france,william saliba,495666,William Saliba,France,1.000,exact,matched
+22084,Bukayo Saka,England,3299,england,bukayo saka,433177,Bukayo Saka,England,1.000,exact,matched
+22128,Robin Aime Robert Le Normand,Spain,3375,spain,robin aime robert le normand,351809,Robin Le Normand,Spain,0.940,token_subset,matched
+34639,Vitor Machado Ferreira,Portugal,3300,portugal,vitor machado ferreira,487469,Vitinha,Portugal,1.000,exact,matched
+3308,Kieran Trippier,England,3299,england,kieran trippier,95810,Kieran Trippier,England,1.000,exact,matched
+15503,Jerdy Schouten,Netherlands,3379,netherlands,jerdy schouten,347900,Jerdy Schouten,Netherlands,1.000,exact,matched
+11514,Giovanni Di Lorenzo,Italy,3376,italy,giovanni di lorenzo,169880,Giovanni Di Lorenzo,Italy,1.000,exact,matched
+5721,Daniel Carvajal Ramos,Spain,3375,spain,daniel carvajal ramos,138927,Dani Carvajal,Spain,1.000,exact,matched
+3570,Pierre-Emile Højbjerg,Denmark,3436,denmark,pierre emile hojbjerg,167799,Pierre-Emile Højbjerg,Denmark,1.000,exact,matched
+5204,Bruno Miguel Borges Fernandes,Portugal,3300,portugal,bruno miguel borges fernandes,240306,Bruno Fernandes,Portugal,1.000,exact,matched
+7480,Alessandro Bastoni,Italy,3376,italy,alessandro bastoni,315853,Alessandro Bastoni,Italy,1.000,exact,matched
+68574,Nicholas Williams Arthuer,Spain,3375,spain,nicholas williams arthuer,709187,Nico Williams,Spain,1.000,exact,matched
+316046,Lamine Yamal Nasraoui Ebana,Spain,3375,spain,lamine yamal nasraoui ebana,937958,Lamine Yamal,Spain,1.000,exact,matched
+5549,Manuel Obafemi Akanji,Switzerland,3384,switzerland,manuel obafemi akanji,284730,Manuel Akanji,Switzerland,1.000,exact,matched
+21582,Tijjani Reijnders,Netherlands,3379,netherlands,tijjani reijnders,460939,Tijjani Reijnders,Netherlands,1.000,exact,matched
+8181,Nicolò Barella,Italy,3376,italy,nicolo barella,255942,Nicolò Barella,Italy,1.000,exact,matched
+3193,Bernardo Mota Veiga de Carvalho e Silva,Portugal,3300,portugal,bernardo mota veiga de carvalho e silva,241641,Bernardo Silva,Portugal,1.000,exact,matched
+30438,Ferdi Erenay Kadıoğlu,Turkey,3381,turkey,ferdi erenay kadioglu,369316,Ferdi Kadıoğlu,Turkiye,1.000,exact,matched
+8247,Joachim Andersen,Denmark,3436,denmark,joachim andersen,260827,Joachim Andersen,Denmark,1.000,exact,matched
+8854,Wout Faes,Belgium,3382,belgium,wout faes,292808,Wout Faes,Belgium,1.000,exact,matched
+5537,Fabian Lukas Schär,Switzerland,3384,switzerland,fabian lukas schar,135343,Fabian Schär,Switzerland,1.000,exact,matched
+8125,Denzel Dumfries,Netherlands,3379,netherlands,denzel dumfries,321528,Denzel Dumfries,Netherlands,1.000,exact,matched
+16016,Michel Aebischer,Switzerland,3384,switzerland,michel aebischer,237658,Michel Aebischer,Switzerland,1.000,exact,matched
+8221,Jonathan Tah,Germany,3262,germany,jonathan tah,196357,Jonathan Tah,Germany,1.000,exact,matched
+6990,Milan Škriniar,Slovakia,3503,slovakia,milan skriniar,204069,Milan Škriniar,Slovakia,1.000,exact,matched
+7039,Hakan Çalhanoğlu,Turkey,3381,turkey,hakan calhanoglu,126414,Hakan Çalhanoğlu,Turkiye,1.000,exact,matched
+39565,Jamal Musiala,Germany,3262,germany,jamal musiala,580195,Jamal Musiala,Germany,1.000,exact,matched
+7005,João Pedro Cavaco Cancelo,Portugal,3300,portugal,joao pedro cavaco cancelo,182712,João Cancelo,Portugal,1.000,exact,matched
+3468,Jordan Pickford,England,3299,england,jordan pickford,130164,Jordan Pickford,England,1.000,exact,matched
+3026,Adrien Rabiot,France,3377,france,adrien rabiot,182913,Adrien Rabiot,France,1.000,exact,matched
+3009,Kylian Mbappé Lottin,France,3377,france,kylian mbappe lottin,342229,Kylian Mbappé,France,1.000,exact,matched
+5544,Ricardo Iván Rodríguez Araya,Switzerland,3384,switzerland,ricardo ivan rodriguez araya,86784,Ricardo Rodríguez,Switzerland,1.000,exact,matched
+6983,Remo Freuler,Switzerland,3384,switzerland,remo freuler,148252,Remo Freuler,Switzerland,1.000,exact,matched
+3306,Nathan Aké,Netherlands,3379,netherlands,nathan ake,177476,Nathan Aké,Netherlands,1.000,exact,matched
+39460,Nicolas Seiwald,Austria,3383,austria,nicolas seiwald,404950,Nicolas Seiwald,Austria,1.000,exact,matched
+3089,Kevin De Bruyne,Belgium,3382,belgium,kevin de bruyne,88755,Kevin De Bruyne,Belgium,1.000,exact,matched
+16532,Daniel Olmo Carvajal,Spain,3375,spain,daniel olmo carvajal,293385,Dani Olmo,Spain,1.000,exact,matched
+8815,Jannik Vestergaard,Denmark,3436,denmark,jannik vestergaard,99331,Jannik Vestergaard,Denmark,1.000,exact,matched
+116587,Arda Güler,Turkey,3381,turkey,arda guler,861410,Arda Güler,Turkiye,1.000,exact,matched
+9195,Robert Andrich,Germany,3262,germany,robert andrich,159088,Robert Andrich,Germany,1.000,exact,matched
+6798,Stanislav Lobotka,Slovakia,3503,slovakia,stanislav lobotka,192735,Stanislav Lobotka,Slovakia,1.000,exact,matched
+39167,Xavi Simons,Netherlands,3379,netherlands,xavi simons,566931,Xavi Simons,Netherlands,1.000,exact,matched
+48347,Amadou Onana,Belgium,3382,belgium,amadou onana,485706,Amadou Onana,Belgium,1.000,exact,matched
+7024,Jorge Luiz Frello Filho,Italy,3376,italy,jorge luiz frello filho,102017,Jorginho,Italy,1.000,exact,matched
+41768,Riccardo Calafiori,Italy,3376,italy,riccardo calafiori,502821,Riccardo Calafiori,Italy,1.000,exact,matched
+16298,Denis Vavro,Slovakia,3503,slovakia,denis vavro,239962,Denis Vavro,Slovakia,1.000,exact,matched
+11821,Stefan Posch,Austria,3383,austria,stefan posch,223974,Stefan Posch,Austria,1.000,exact,matched
+40724,Florian Wirtz,Germany,3262,germany,florian wirtz,598577,Florian Wirtz,Germany,1.000,exact,matched
+5477,Ousmane Dembélé,France,3377,france,ousmane dembele,288230,Ousmane Dembélé,France,1.000,exact,matched
+2988,Memphis Depay,Netherlands,3379,netherlands,memphis depay,167850,Memphis Depay,Netherlands,1.000,exact,matched
+3959,Andreas Christensen,Denmark,3436,denmark,andreas christensen,196948,Andreas Christensen,Denmark,1.000,exact,matched
+3043,Christian Dannemann Eriksen,Denmark,3436,denmark,christian dannemann eriksen,69633,Christian Eriksen,Denmark,1.000,exact,matched
+12407,Maximilian Mittelstädt,Germany,3262,germany,maximilian mittelstadt,282660,Maximilian Mittelstädt,Germany,1.000,exact,matched
+5463,Luka Modrić,Croatia,3556,croatia,luka modric,27992,Luka Modrić,Croatia,1.000,exact,matched
+8621,Morten Hjulmand,Denmark,3436,denmark,morten hjulmand,461496,Morten Hjulmand,Denmark,1.000,exact,matched
+99174,Kobbie Mainoo,England,3299,england,kobbie mainoo,820374,Kobbie Mainoo,England,1.000,exact,matched
+5487,Antoine Griezmann,France,3377,france,antoine griezmann,125781,Antoine Griezmann,France,1.000,exact,matched
+41202,Giorgi Kochorashvili,Georgia,3669,georgia,giorgi kochorashvili,405564,Giorgi Kochorashvili,Georgia,1.000,exact,matched
+18617,Mykola Matvienko,Ukraine,3699,ukraine,mykola matvienko,289059,Mykola Matvienko,Ukraine,1.000,exact,matched
+11748,Unai Simón Mendibil,Spain,3375,spain,unai simon mendibil,262396,Unai Simón,Spain,1.000,exact,matched
+48383,Abdülkerim Bardakcı,Turkey,3381,turkey,abdulkerim bardakci,199316,Abdülkerim Bardakcı,Turkiye,1.000,exact,matched
+12169,João Maria Lobo Alves Palhinha Gonçalves,Portugal,3300,portugal,joao maria lobo alves palhinha goncalves,257455,João Palhinha,Portugal,1.000,exact,matched
+10287,İlkay Gündoğan,Germany,3262,germany,ilkay gundogan,53622,İlkay Gündoğan,Germany,1.000,exact,matched
+6321,Milos Veljkovic,Serbia,3438,serbia,milos veljkovic,202228,Milos Veljkovic,Serbia,1.000,exact,matched
+5603,Nikola Milenković,Serbia,3438,serbia,nikola milenkovic,413507,Nikola Milenković,Serbia,1.000,exact,matched
+20750,Cody Mathès Gakpo,Netherlands,3379,netherlands,cody mathes gakpo,434675,Cody Gakpo,Netherlands,1.000,exact,matched
+31968,Adam Gnezda Čerin,Slovenia,3588,slovenia,adam gnezda cerin,401394,Adam Gnezda Cerin,Slovenia,1.000,exact,matched
+134209,Barış Alper Yılmaz,Turkey,3381,turkey,baris alper yilmaz,541537,Barış Alper Yılmaz,Turkiye,1.000,exact,matched
+10955,Harry Kane,England,3299,england,harry kane,132098,Harry Kane,England,1.000,exact,matched
+3477,Álvaro Borja Morata Martín,Spain,3375,spain,alvaro borja morata martin,128223,Álvaro Morata,Spain,1.000,exact,matched
+37148,Josip Šutalo,Croatia,3556,croatia,josip sutalo,371001,Josip Sutalo,Croatia,1.000,exact,matched
+6989,Timothy Castagne,Belgium,3382,belgium,timothy castagne,262226,Timothy Castagne,Belgium,1.000,exact,matched
+137487,Žan Karničnik,Slovenia,3588,slovenia,zan karnicnik,507403,Zan Karnicnik,Slovenia,1.000,exact,matched
+133305,Samet Akaydin,Turkey,3381,turkey,samet akaydin,295024,Samet Akaydin,Turkiye,1.000,exact,matched
+5469,Marcelo Brozović,Croatia,3556,croatia,marcelo brozovic,156617,Marcelo Brozović,Croatia,1.000,exact,matched
+23650,Jeremy Doku,Belgium,3382,belgium,jeremy doku,486049,Jérémy Doku,Belgium,1.000,exact,matched
+3077,Jan Vertonghen,Belgium,3382,belgium,jan vertonghen,43250,Jan Vertonghen,Belgium,1.000,exact,matched
+57303,Kristjan Asllani,Albania,3561,albania,kristjan asllani,543771,Kristjan Asllani,Albania,1.000,exact,matched
+5456,Mateo Kovačić,Croatia,3556,croatia,mateo kovacic,51471,Mateo Kovacic,Croatia,1.000,exact,matched
+8967,Ondrej Duda,Slovakia,3503,slovakia,ondrej duda,232418,Ondrej Duda,Slovakia,1.000,exact,matched
+8966,Kai Havertz,Germany,3262,germany,kai havertz,309400,Kai Havertz,Germany,1.000,exact,matched
+45190,Dan Ndoye,Switzerland,3384,switzerland,dan ndoye,365108,Dan Ndoye,Switzerland,1.000,exact,matched
+39136,Illia Zabarnyi,Ukraine,3699,ukraine,illia zabarnyi,659089,Ilya Zabarnyi,Ukraine,1.000,exact,matched
+24977,Christoph Baumgartner,Austria,3383,austria,christoph baumgartner,324278,Christoph Baumgartner,Austria,1.000,exact,matched
+16879,Dávid Hancko,Slovakia,3503,slovakia,david hancko,404418,Dávid Hancko,Slovakia,1.000,exact,matched
+8518,Marcel Sabitzer,Austria,3383,austria,marcel sabitzer,106987,Marcel Sabitzer,Austria,1.000,exact,matched
+37274,Bart Verbruggen,Netherlands,3379,netherlands,bart verbruggen,565093,Bart Verbruggen,Netherlands,1.000,exact,matched
+12293,Kaan Ayhan,Turkey,3381,turkey,kaan ayhan,119031,Kaan Ayhan,Turkiye,1.000,exact,matched
+27719,Strahinja Pavlović,Serbia,3438,serbia,strahinja pavlovic,574671,Strahinja Pavlović,Serbia,1.000,exact,matched
+10826,Mert Müldür,Turkey,3381,turkey,mert muldur,353922,Mert Müldür,Turkiye,1.000,exact,matched
+25036,Otar Kakabadze,Georgia,3669,georgia,otar kakabadze,214250,Otar Kakabadze,Georgia,1.000,exact,matched
+43913,Arthur Theate,Belgium,3382,belgium,arthur theate,368891,Arthur Theate,Belgium,1.000,exact,matched
+16554,Joakim Mæhle,Denmark,3436,denmark,joakim maehle,369674,Joakim Maehle,Denmark,1.000,exact,matched
+33018,Joško Gvardiol,Croatia,3556,croatia,josko gvardiol,475959,Josko Gvardiol,Croatia,1.000,exact,matched
+21209,Dominik Szoboszlai,Hungary,3468,hungary,dominik szoboszlai,451276,Dominik Szoboszlai,Hungary,1.000,exact,matched
+11396,Florian Grillitsch,Austria,3383,austria,florian grillitsch,195736,Florian Grillitsch,Austria,1.000,exact,matched
+151813,Kenan Yildiz,Turkey,3381,turkey,kenan yildiz,845654,Kenan Yıldız,Turkiye,1.000,exact,matched
+21633,Joey Veerman,Netherlands,3379,netherlands,joey veerman,408574,Joey Veerman,Netherlands,1.000,exact,matched
+24547,Alexander Hartmann Bah,Denmark,3436,denmark,alexander hartmann bah,452607,Alexander Bah,Denmark,1.000,exact,matched
+30401,Ruben Vargas,Switzerland,3384,switzerland,ruben vargas,345886,Rubén Vargas,Switzerland,1.000,exact,matched
+6687,Saša Lukić,Serbia,3438,serbia,sasa lukic,245056,Saša Lukić,Serbia,1.000,exact,matched
+5207,Cristiano Ronaldo dos Santos Aveiro,Portugal,3300,portugal,cristiano ronaldo dos santos aveiro,8198,Cristiano Ronaldo,Portugal,1.000,exact,matched
+3042,Mikel Merino Zazón,Spain,3375,spain,mikel merino zazon,338424,Mikel Merino,Spain,1.000,exact,matched
+11820,Kevin Danso,Austria,3383,austria,kevin danso,263236,Kevin Danso,Austria,1.000,exact,matched
+38229,Khvicha Kvaratskhelia,Georgia,3669,georgia,khvicha kvaratskhelia,502670,Khvicha Kvaratskhelia,Georgia,1.000,exact,matched
+3575,Oleksandr Zinchenko,Ukraine,3699,ukraine,oleksandr zinchenko,203853,Oleksandr Zinchenko,Ukraine,1.000,exact,matched
+39624,Francisco Fernandes Conceição,Portugal,3300,portugal,francisco fernandes conceicao,487474,Francisco Conceição,Portugal,0.951,fuzzy,matched
+5660,Piotr Zieliński,Poland,3442,poland,piotr zielinski,181136,Piotr Zieliński,Poland,1.000,exact,matched
+8506,Konrad Laimer,Austria,3383,austria,konrad laimer,223967,Konrad Laimer,Austria,1.000,exact,matched
+7156,Federico Chiesa,Italy,3376,italy,federico chiesa,341092,Federico Chiesa,Italy,1.000,exact,matched
+42822,András Schäfer,Hungary,3468,hungary,andras schafer,454863,András Schäfer,Hungary,1.000,exact,matched
+10919,Juraj Kucka,Slovakia,3503,slovakia,juraj kucka,74943,Juraj Kucka,Slovakia,1.000,exact,matched
+21294,Mykola Shaparenko,Ukraine,3699,ukraine,mykola shaparenko,368611,Mykola Shaparenko,Ukraine,1.000,exact,matched
+5550,Yann Sommer,Switzerland,3384,switzerland,yann sommer,42205,Yann Sommer,Switzerland,1.000,exact,matched
+31908,Andrei Burcă Andonie,Romania,3447,romania,andrei burca andonie,289308,Andrei Burcă,Romania,0.960,prefix,matched
+16047,Jaka Bijol,Slovenia,3588,slovenia,jaka bijol,371851,Jaka Bijol,Slovenia,1.000,exact,matched
+30179,Ivan Ilić,Serbia,3438,serbia,ivan ilic,470794,Ivan Ilić,Serbia,1.000,exact,matched
+15896,Timi Elšnik,Slovenia,3588,slovenia,timi elsnik,320854,Timi Max Elsnik,Slovenia,0.940,token_subset,matched
+42106,Gonçalo Bernardo Inácio,Portugal,3300,portugal,goncalo bernardo inacio,549006,Gonçalo Inácio,Portugal,1.000,exact,matched
+44166,Jakub Piotr Kiwior,Poland,3442,poland,jakub piotr kiwior,425918,Jakub Kiwior,Poland,1.000,exact,matched
+18360,Rafael Alexandre Conceição Leão,Portugal,3300,portugal,rafael alexandre conceicao leao,357164,Rafael Leão,Portugal,0.954,fuzzy,matched
+38975,Georgiy Sudakov,Ukraine,3699,ukraine,georgiy sudakov,623325,Georgiy Sudakov,Ukraine,1.000,exact,matched
+49097,Mario Mitaj,Albania,3561,albania,mario mitaj,726114,Mario Mitaj,Albania,1.000,exact,matched
+3761,Mike Maignan,France,3377,france,mike maignan,182906,Mike Maignan,France,1.000,exact,matched
+16528,Petar Stojanović,Slovenia,3588,slovenia,petar stojanovic,183841,Petar Stojanović,Slovenia,1.000,exact,matched
+33234,Georges Mikautadze,Georgia,3669,georgia,georges mikautadze,729814,Georges Mikautadze,Georgia,1.000,exact,matched
+7979,Przemysław Frankowski,Poland,3442,poland,przemyslaw frankowski,239743,Przemyslaw Frankowski,Poland,1.000,exact,matched
+6318,Andrija Živković,Serbia,3438,serbia,andrija zivkovic,206843,Andrija Zivkovic,Serbia,1.000,exact,matched
+16570,Vladimír Coufal,Czech Republic,3445,czech republic,vladimir coufal,157672,Vladimír Coufal,Czechia,1.000,exact,matched
+22212,Orkun Kökçü,Turkey,3381,turkey,orkun kokcu,454567,Orkun Kökçü,Turkiye,1.000,exact,matched
+3711,Martin Dúbravka,Slovakia,3503,slovakia,martin dubravka,74960,Martin Dúbravka,Slovakia,1.000,exact,matched
+38759,Benjamin Šeško,Slovenia,3588,slovenia,benjamin sesko,627442,Benjamin Sesko,Slovenia,1.000,exact,matched
+7655,Lasha Dvali,Georgia,3669,georgia,lasha dvali,222332,Lasha Dvali,Georgia,1.000,exact,matched
+30486,Pedro González López,Spain,3375,spain,pedro gonzalez lopez,683840,Pedri,Spain,1.000,exact,matched
+5545,Breel-Donald Embolo,Switzerland,3384,switzerland,breel donald embolo,237662,Breel Embolo,Switzerland,1.000,exact,matched
+16344,Răzvan Gabriel Marin,Romania,3447,romania,razvan gabriel marin,295183,Răzvan Marin,Romania,1.000,exact,matched
+49337,Josip Stanišić,Croatia,3556,croatia,josip stanisic,483046,Josip Stanisic,Croatia,1.000,exact,matched
+7108,Berat Djimsiti,Albania,3561,albania,berat djimsiti,165513,Berat Djimsiti,Albania,1.000,exact,matched
+28272,Ladislav Krejčí,Czech Republic,3445,czech republic,ladislav krejci,345911,Ladislav Krejčí,Czechia,1.000,exact,matched
+9731,Patrick Pentz,Austria,3383,austria,patrick pentz,223972,Patrick Pentz,Austria,1.000,exact,matched
+10916,Nicolae Claudiu Stanciu,Romania,3447,romania,nicolae claudiu stanciu,148372,Nicolae Stanciu,Romania,1.000,exact,matched
+8509,Willi Orban,Hungary,3468,hungary,willi orban,93740,Willi Orbán,Hungary,1.000,exact,matched
+9722,Peter Pekarík,Slovakia,3503,slovakia,peter pekarik,51100,Peter Pekarík,Slovakia,1.000,exact,matched
+51672,Rasmus Winther Højlund,Denmark,3436,denmark,rasmus winther hojlund,610442,Rasmus Højlund,Denmark,1.000,exact,matched
+5202,José Ignacio Fernández Iglesias,Spain,3375,spain,jose ignacio fernandez iglesias,58884,Nacho Fernández,Spain,1.000,exact,matched
+34600,Nicușor Silviu Bancu,Romania,3447,romania,nicusor silviu bancu,213195,Nicușor Bancu,Romania,1.000,exact,matched
+31193,Denis Mihai Drăguş,Romania,3447,romania,denis mihai dragus,405399,Denis Drăguș,Romania,1.000,exact,matched
+5570,Manuel Neuer,Germany,3262,germany,manuel neuer,17259,Manuel Neuer,Germany,1.000,exact,matched
+24861,Andrei Florin Ratiu,Romania,3447,romania,andrei florin ratiu,527966,Andrei Rațiu,Romania,1.000,exact,matched
+19316,Roland Sallai,Hungary,3468,hungary,roland sallai,332798,Roland Sallai,Hungary,1.000,exact,matched
+10534,Callum McGregor,Scotland,3380,scotland,callum mcgregor,120977,Callum McGregor,Scotland,1.000,exact,matched
+32975,Diogo Meireles Costa,Portugal,3300,portugal,diogo meireles costa,357153,Diogo Costa,Portugal,0.940,token_subset,matched
+23646,Giorgi Chakvetadze,Georgia,3669,georgia,giorgi chakvetadze,412616,Giorgi Chakvetadze,Georgia,1.000,exact,matched
+31866,Andraž Šporar,Slovenia,3588,slovenia,andraz sporar,179860,Andraz Sporar,Slovenia,1.000,exact,matched
+7796,Silvan Widmer,Switzerland,3384,switzerland,silvan widmer,168989,Silvan Widmer,Switzerland,1.000,exact,matched
+6963,Lorenzo Pellegrini,Italy,3376,italy,lorenzo pellegrini,286297,Lorenzo Pellegrini,Italy,1.000,exact,matched
+8773,Marin Pongracic,Croatia,3556,croatia,marin pongracic,282144,Marin Pongracic,Croatia,1.000,exact,matched
+9481,Grant Campbell Hanley,Scotland,3380,scotland,grant campbell hanley,121385,Grant Hanley,Scotland,1.000,exact,matched
+29480,Jakub Moder,Poland,3442,poland,jakub moder,384461,Jakub Moder,Poland,1.000,exact,matched
+24438,Ylber Ramadani,Albania,3561,albania,ylber ramadani,442703,Ylber Ramadani,Albania,1.000,exact,matched
+50436,Fabian Rieder,Switzerland,3384,switzerland,fabian rieder,507341,Fabian Rieder,Switzerland,1.000,exact,matched
+28032,Ivan Schranz,Slovakia,3503,slovakia,ivan schranz,108416,Ivan Schranz,Slovakia,1.000,exact,matched
+8931,Philipp Lienhart,Austria,3383,austria,philipp lienhart,225657,Philipp Lienhart,Austria,1.000,exact,matched
+5460,Andrej Kramarić,Croatia,3556,croatia,andrej kramaric,46580,Andrej Kramaric,Croatia,1.000,exact,matched
+12255,Federico Dimarco,Italy,3376,italy,federico dimarco,198116,Federico Dimarco,Italy,1.000,exact,matched
+30913,Marius Mihai Marin,Romania,3447,romania,marius mihai marin,379163,Marius Marin,Romania,1.000,exact,matched
+8240,Koen Casteels,Belgium,3382,belgium,koen casteels,108880,Koen Casteels,Belgium,1.000,exact,matched
+24921,Martín Zubimendi Ibáñez,Spain,3375,spain,martin zubimendi ibanez,423440,Martín Zubimendi,Spain,1.000,exact,matched
+16469,Tomáš Holeš,Czech Republic,3445,czech republic,tomas holes,216278,Tomas Holes,Czechia,1.000,exact,matched
+28211,Erik Janža,Slovenia,3588,slovenia,erik janza,174522,Erik Janza,Slovenia,1.000,exact,matched
+7839,Guram Kashia,Georgia,3669,georgia,guram kashia,55972,Guram Kashia,Georgia,1.000,exact,matched
+28914,Lovro Majer,Croatia,3556,croatia,lovro majer,387106,Lovro Majer,Croatia,1.000,exact,matched
+50502,Nicola Zalewski,Poland,3442,poland,nicola zalewski,550108,Nicola Zalewski,Poland,1.000,exact,matched
+11116,Jack Hendry,Scotland,3380,scotland,jack hendry,363223,Jack Hendry,Scotland,1.000,exact,matched
+205932,Vanja Drkušić,Slovenia,3588,slovenia,vanja drkusic,371856,Vanja Drkusic,Slovenia,1.000,exact,matched
+13315,Philipp Mwene,Austria,3383,austria,philipp mwene,127573,Phillipp Mwene,Austria,0.963,fuzzy,matched
+8068,Maximilian Wöber,Austria,3383,austria,maximilian wober,263361,Maximilian Wöber,Austria,1.000,exact,matched
+3655,Andrew Robertson,Scotland,3380,scotland,andrew robertson,234803,Andrew Robertson,Scotland,1.000,exact,matched
+39615,Radu Drăgușin,Romania,3447,romania,radu dragusin,568559,Radu Drăgușin,Romania,1.000,exact,matched
+31067,Billy Gilmour,Scotland,3380,scotland,billy gilmour,423744,Billy Gilmour,Scotland,1.000,exact,matched
+6993,Bryan Cristante,Italy,3376,italy,bryan cristante,199248,Bryan Cristante,Italy,1.000,exact,matched
+28242,Florin Constantin Niţă,Romania,3447,romania,florin constantin nita,200475,Florin Niță,Romania,1.000,exact,matched
+9927,Rúben Diogo Da Silva Neves,Portugal,3300,portugal,ruben diogo da silva neves,225161,Rúben Neves,Portugal,1.000,exact,matched
+3053,Leroy Sané,Germany,3262,germany,leroy sane,192565,Leroy Sané,Germany,1.000,exact,matched
+4870,Tomáš Souček,Czech Republic,3445,czech republic,tomas soucek,283628,Tomáš Souček,Czechia,1.000,exact,matched
+56905,Dennis Man,Romania,3447,romania,dennis man,397486,Dennis Man,Romania,1.000,exact,matched
+24778,Eduardo Camavinga,France,3377,france,eduardo camavinga,640428,Eduardo Camavinga,France,1.000,exact,matched
+2954,Youri Tielemans,Belgium,3382,belgium,youri tielemans,249565,Youri Tielemans,Belgium,1.000,exact,matched
+5633,Yannick Ferreira Carrasco,Belgium,3382,belgium,yannick ferreira carrasco,140776,Yannick Carrasco,Belgium,1.000,exact,matched
+22308,Anthony Ralston,Scotland,3380,scotland,anthony ralston,388171,Anthony Ralston,Scotland,1.000,exact,matched
+3325,Marko Arnautović,Austria,3383,austria,marko arnautovic,41384,Marko Arnautovic,Austria,1.000,exact,matched
+78241,İsmail Yüksek,Turkey,3381,turkey,ismail yuksek,613725,İsmail Yüksek,Turkiye,1.000,exact,matched
+4269,Aleksandar Mitrović,Serbia,3438,serbia,aleksandar mitrovic,51152,Aleksandar Mitrović,Serbia,1.000,exact,matched
+264017,Anzor Mekvabishvili,Georgia,3669,georgia,anzor mekvabishvili,502671,Anzor Mekvabishvili,Georgia,1.000,exact,matched
+102371,Giorgi Mamardashvili,Georgia,3669,georgia,giorgi mamardashvili,502676,Giorgi Mamardashvili,Georgia,1.000,exact,matched
+2972,Marcus Thuram,France,3377,france,marcus thuram,318528,Marcus Thuram,France,1.000,exact,matched
+41542,Daniel Vivian Moreno,Spain,3375,spain,daniel vivian moreno,524000,Dani Vivian,Spain,1.000,exact,matched
+28034,Lukáš Provod,Czech Republic,3445,czech republic,lukas provod,292779,Lukas Provod,Czechia,1.000,exact,matched
+3289,Romelu Lukaku Menama,Belgium,3382,belgium,romelu lukaku menama,96341,Romelu Lukaku,Belgium,0.960,prefix,matched
+3664,Trent Alexander-Arnold,England,3299,england,trent alexander arnold,314353,Trent Alexander-Arnold,England,1.000,exact,matched
+7975,Lukáš Haraslín,Slovakia,3503,slovakia,lukas haraslin,239941,Lukas Haraslin,Slovakia,1.000,exact,matched
+4587,Matteo Darmian,Italy,3376,italy,matteo darmian,54906,Matteo Darmian,Italy,1.000,exact,matched
+8291,Arlind Afrim Ajeti,Albania,3561,albania,arlind afrim ajeti,159288,Arlind Ajeti,Albania,1.000,exact,matched
+30310,Fehmi Mert Günok,Turkey,3381,turkey,fehmi mert gunok,51894,Mert Günok,Turkiye,1.000,exact,matched
+21261,Jonas Older Wind,Denmark,3436,denmark,jonas older wind,391004,Jonas Wind,Denmark,1.000,exact,matched
+32030,Nedim Bajrami,Albania,3561,albania,nedim bajrami,390177,Nedim Bajrami,Albania,1.000,exact,matched
+23558,Merih Demiral,Turkey,3381,turkey,merih demiral,340879,Merih Demiral,Turkiye,1.000,exact,matched
+23256,Pedro Lomba Neto,Portugal,3300,portugal,pedro lomba neto,487465,Pedro Neto,Portugal,1.000,exact,matched
+38909,Nicolò Fagioli,Italy,3376,italy,nicolo fagioli,432090,Nicolò Fagioli,Italy,1.000,exact,matched
+6685,Mikel Oyarzabal Ugarte,Spain,3375,spain,mikel oyarzabal ugarte,351478,Mikel Oyarzabal,Spain,1.000,exact,matched
+3620,Scott McTominay,Scotland,3380,scotland,scott mctominay,315969,Scott McTominay,Scotland,1.000,exact,matched
+16028,José Diogo Dalot Teixeira,Portugal,3300,portugal,jose diogo dalot teixeira,357147,Diogo Dalot,Portugal,1.000,exact,matched
+16559,Leandro Trossard,Belgium,3382,belgium,leandro trossard,144028,Leandro Trossard,Belgium,1.000,exact,matched
+39490,Luka Sučić,Croatia,3556,croatia,luka sucic,502722,Luka Sucic,Croatia,1.000,exact,matched
+34904,Róbert Boženík,Slovakia,3503,slovakia,robert bozenik,454576,Róbert Boženík,Slovakia,1.000,exact,matched
+60343,Victor Bernth Kristansen,Denmark,3436,denmark,victor bernth kristansen,564529,Victor Kristiansen,Denmark,1.000,exact,matched
+114832,Zeno Debast,Belgium,3382,belgium,zeno debast,548193,Zeno Debast,Belgium,1.000,exact,matched
+28565,Ianis Hagi,Romania,3447,romania,ianis hagi,282076,Ianis Hagi,Romania,1.000,exact,matched
+31089,Jan Mlakar,Slovenia,3588,slovenia,jan mlakar,309180,Jan Mlakar,Slovenia,1.000,exact,matched
+4626,Jan Bednarek,Poland,3442,poland,jan bednarek,243028,Jan Bednarek,Poland,1.000,exact,matched
+12034,David Raum,Germany,3262,germany,david raum,318204,David Raum,Germany,1.000,exact,matched
+6378,Jan Oblak,Slovenia,3588,slovenia,jan oblak,121483,Jan Oblak,Slovenia,1.000,exact,matched
+22379,Angus Gunn,Scotland,3380,scotland,angus gunn,201574,Angus Gunn,Scotland,1.000,exact,matched
+7036,Gianluigi Donnarumma,Italy,3376,italy,gianluigi donnarumma,315858,Gianluigi Donnarumma,Italy,1.000,exact,matched
+10336,Alejandro Grimaldo García,Spain,3375,spain,alejandro grimaldo garcia,193082,Alejandro Grimaldo,Spain,1.000,exact,matched
+3831,Dušan Tadić,Serbia,3438,serbia,dusan tadic,36139,Dušan Tadić,Serbia,1.000,exact,matched
+39461,Cole Palmer,England,3299,england,cole palmer,568177,Cole Palmer,England,1.000,exact,matched
+3815,Kasper Schmeichel,Denmark,3436,denmark,kasper schmeichel,16911,Kasper Schmeichel,Denmark,1.000,exact,matched
+40920,Márton Dárdai,Hungary,3468,hungary,marton dardai,432281,Márton Dárdai,Hungary,1.000,exact,matched
+144127,Volodymyr Brazhko,Ukraine,3699,ukraine,volodymyr brazhko,669306,Volodymyr Brazhko,Ukraine,1.000,exact,matched
+30926,Davide Frattesi,Italy,3376,italy,davide frattesi,394300,Davide Frattesi,Italy,1.000,exact,matched
+39545,Alexander Prass,Austria,3383,austria,alexander prass,434116,Alexander Prass,Austria,1.000,exact,matched
+89635,Milos Kerkez,Hungary,3468,hungary,milos kerkez,730861,Milos Kerkez,Hungary,1.000,exact,matched
+12921,Barnabás Varga,Hungary,3468,hungary,barnabas varga,328573,Barnabás Varga,Hungary,1.000,exact,matched
+12041,João Félix Sequeira,Portugal,3300,portugal,joao felix sequeira,462250,João Félix,Portugal,1.000,exact,matched
+33680,Kacper Urbanski,Poland,3442,poland,kacper urbanski,699442,Kacper Urbański,Poland,1.000,exact,matched
+8784,Romano Schmid,Austria,3383,austria,romano schmid,346853,Romano Schmid,Austria,1.000,exact,matched
+15582,Donyell Malen,Netherlands,3379,netherlands,donyell malen,326029,Donyell Malen,Netherlands,1.000,exact,matched
+45863,Oleksandr Tymchyk,Ukraine,3699,ukraine,oleksandr tymchyk,287792,Oleksandr Tymchyk,Ukraine,1.000,exact,matched
+15731,Predrag Rajković,Serbia,3438,serbia,predrag rajkovic,190263,Predrag Rajković,Serbia,1.000,exact,matched
+46789,Bendegúz Bolla,Hungary,3468,hungary,bendeguz bolla,439351,Bendegúz Bolla,Hungary,1.000,exact,matched
+81330,Robin Hranáč,Czech Republic,3445,czech republic,robin hranac,620217,Robin Hranac,Czechia,1.000,exact,matched
+5589,Sergej Milinković-Savić,Serbia,3438,serbia,sergej milinkovic savic,266302,Sergej Milinković-Savić,Serbia,1.000,exact,matched
+22097,Randal Kolo Muani,France,3377,france,randal kolo muani,487969,Randal Kolo Muani,France,1.000,exact,matched
+10540,Kieran Tierney,Scotland,3380,scotland,kieran tierney,300716,Kieran Tierney,Scotland,1.000,exact,matched
+9085,Salih Özcan,Turkey,3381,turkey,salih ozcan,244940,Salih Özcan,Turkiye,1.000,exact,matched
+134272,David Jurásek,Czech Republic,3445,czech republic,david jurasek,500054,David Jurásek,Czechia,1.000,exact,matched
+33297,Patrick Wimmer,Austria,3383,austria,patrick wimmer,533295,Patrick Wimmer,Austria,1.000,exact,matched
+9466,Che Adams,Scotland,3380,scotland,che adams,346779,Ché Adams,Scotland,1.000,exact,matched
+3382,Luke Shaw,England,3299,england,luke shaw,183288,Luke Shaw,England,1.000,exact,matched
+10002,Scott McKenna,Scotland,3380,scotland,scott mckenna,255906,Scott McKenna,Scotland,1.000,exact,matched
+8524,Péter Gulácsi,Hungary,3468,hungary,peter gulacsi,57071,Péter Gulácsi,Hungary,1.000,exact,matched
+6821,Jesús Navas González,Spain,3375,spain,jesus navas gonzalez,15956,Jesús Navas,Spain,1.000,exact,matched
+24118,Nico Schlotterbeck,Germany,3262,germany,nico schlotterbeck,388198,Nico Schlotterbeck,Germany,1.000,exact,matched
+35653,Tomáš Suslov,Slovakia,3503,slovakia,tomas suslov,540333,Tomas Suslov,Slovakia,1.000,exact,matched
+13621,Danilo Luís Hélio Pereira,Portugal,3300,portugal,danilo luis helio pereira,141050,Danilo Pereira,Portugal,1.000,exact,matched
+41186,Jasir Asani,Albania,3561,albania,jasir asani,288597,Jasir Asani,Albania,1.000,exact,matched
+3493,Emre Can,Germany,3262,germany,emre can,119296,Emre Can,Germany,1.000,exact,matched
+10992,Gianluca Scamacca,Italy,3376,italy,gianluca scamacca,315867,Gianluca Scamacca,Italy,1.000,exact,matched
+30739,Paweł Dawidowicz,Poland,3442,poland,pawel dawidowicz,248732,Paweł Dawidowicz,Poland,1.000,exact,matched
+16531,Dominik Livaković,Croatia,3556,croatia,dominik livakovic,205927,Dominik Livakovic,Croatia,1.000,exact,matched
+22242,Heorhii Tsitaishvili,Georgia,3669,georgia,heorhii tsitaishvili,419067,Giorgi Tsitaishvili,Georgia,1.000,exact,matched
+9974,John McGinn,Scotland,3380,scotland,john mcginn,193116,John McGinn,Scotland,1.000,exact,matched
+22352,Lutsharel Geertruida,Netherlands,3379,netherlands,lutsharel geertruida,420210,Lutsharel Geertruida,Netherlands,1.000,exact,matched
+7789,Thomas Strakosha,Albania,3561,albania,thomas strakosha,222209,Thomas Strakosha,Albania,1.000,exact,matched
+11268,Attila Fiola,Hungary,3468,hungary,attila fiola,108669,Attila Fiola,Hungary,1.000,exact,matched
+7531,Qazim Laçi,Albania,3561,albania,qazim laci,290552,Qazim Laci,Albania,1.000,exact,matched
+5474,Ivan Perišić,Croatia,3556,croatia,ivan perisic,42460,Ivan Perišić,Croatia,1.000,exact,matched
+8950,Orel Mangala,Belgium,3382,belgium,orel mangala,289592,Orel Mangala,Belgium,1.000,exact,matched
+7162,Ádám Nagy,Hungary,3468,hungary,adam nagy,368559,Ádám Nagy,Hungary,1.000,exact,matched
+8778,Gernot Trauner,Austria,3383,austria,gernot trauner,59145,Gernot Trauner,Austria,1.000,exact,matched
+29399,Conor Gallagher,England,3299,england,conor gallagher,488362,Conor Gallagher,England,1.000,exact,matched
+6748,Ferrán Torres García,Spain,3375,spain,ferran torres garcia,398184,Ferran Torres,Spain,1.000,exact,matched
+43976,David Strelec,Slovakia,3503,slovakia,david strelec,482836,David Strelec,Slovakia,1.000,exact,matched
+39483,Mykhailo Mudryk,Ukraine,3699,ukraine,mykhailo mudryk,537860,Mykhaylo Mudryk,Ukraine,0.933,fuzzy,matched
+23987,Rey Manaj,Albania,3561,albania,rey manaj,308278,Rey Manaj,Albania,1.000,exact,matched
+8546,Niclas Füllkrug,Germany,3262,germany,niclas fullkrug,75489,Niclas Füllkrug,Germany,1.000,exact,matched
+7044,Patrik Schick,Czech Republic,3445,czech republic,patrik schick,242086,Patrik Schick,Czechia,1.000,exact,matched
+44183,Zuriko Davitashvili,Georgia,3669,georgia,zuriko davitashvili,427572,Zuriko Davitashvili,Georgia,1.000,exact,matched
+25079,Artem Dovbyk,Ukraine,3699,ukraine,artem dovbyk,343537,Artem Dovbyk,Ukraine,1.000,exact,matched
+18015,Dušan Vlahović,Serbia,3438,serbia,dusan vlahovic,357498,Dušan Vlahović,Serbia,1.000,exact,matched
+49689,Muhammed Kerem Aktürkoğlu,Turkey,3381,turkey,muhammed kerem akturkoglu,382528,Kerem Aktürkoğlu,Turkiye,1.000,exact,matched
+11335,Otar Kiteishvili,Georgia,3669,georgia,otar kiteishvili,352596,Otar Kiteishvili,Georgia,1.000,exact,matched
+7004,Gianluca Mancini,Italy,3376,italy,gianluca mancini,256448,Gianluca Mancini,Italy,1.000,exact,matched
+7829,Wout Weghorst,Netherlands,3379,netherlands,wout weghorst,228645,Wout Weghorst,Netherlands,1.000,exact,matched
+16005,Solomon Kverkvelia,Georgia,3669,georgia,solomon kverkvelia,157391,Solomon Kvirkvelia,Georgia,0.944,fuzzy,matched
+6374,Nélson Cabral Semedo,Portugal,3300,portugal,nelson cabral semedo,231572,Nélson Semedo,Portugal,1.000,exact,matched
+7993,Filip Mladenović,Serbia,3438,serbia,filip mladenovic,168063,Filip Mladenovic,Serbia,1.000,exact,matched
+37330,Anatolii Trubin,Ukraine,3699,ukraine,anatolii trubin,537844,Anatoliy Trubin,Ukraine,0.933,fuzzy,matched
+28040,Jindřich Staněk,Czech Republic,3445,czech republic,jindrich stanek,242089,Jindrich Stanek,Czechia,1.000,exact,matched
+29163,Josip Juranović,Croatia,3556,croatia,josip juranovic,362977,Josip Juranovic,Croatia,1.000,exact,matched
+7031,Elseid Hysaj,Albania,3561,albania,elseid hysaj,200056,Elseid Hysaj,Albania,1.000,exact,matched
+4664,Sebastian Szymański,Poland,3442,poland,sebastian szymanski,320748,Sebastian Szymański,Poland,1.000,exact,matched
+5668,Robert Lewandowski,Poland,3442,poland,robert lewandowski,38253,Robert Lewandowski,Poland,1.000,exact,matched
+5669,Wojciech Szczęsny,Poland,3442,poland,wojciech szczesny,44058,Wojciech Szczęsny,Poland,1.000,exact,matched
+3822,Ezri Konsa Ngoyo,England,3299,england,ezri konsa ngoyo,413403,Ezri Konsa,England,1.000,exact,matched
+46376,Attila Szalai,Hungary,3468,hungary,attila szalai,263380,Attila Szalai,Hungary,1.000,exact,matched
+48178,Luka Lochoshvili,Georgia,3669,georgia,luka lochoshvili,345189,Luka Lochoshvili,Georgia,1.000,exact,matched
+39420,Bradley Barcola,France,3377,france,bradley barcola,708265,Bradley Barcola,France,1.000,exact,matched
+23649,Roman Yaremchuk,Ukraine,3699,ukraine,roman yaremchuk,221958,Roman Yaremchuk,Ukraine,1.000,exact,matched
+72512,Valentin Mihai Mihăilă,Romania,3447,romania,valentin mihai mihaila,535469,Valentin Mihăilă,Romania,0.940,token_subset,matched
+8830,Andriy Yarmolenko,Ukraine,3699,ukraine,andriy yarmolenko,69015,Andriy Yarmolenko,Ukraine,1.000,exact,matched
+8654,Ante Budimir,Croatia,3556,croatia,ante budimir,46413,Ante Budimir,Croatia,1.000,exact,matched
+9929,Diogo José Teixeira da Silva,Portugal,3300,portugal,diogo jose teixeira da silva,340950,Diogo Jota,Portugal,1.000,exact,matched
+8309,Michael Gregoritsch,Austria,3383,austria,michael gregoritsch,120205,Michael Gregoritsch,Austria,1.000,exact,matched
+17042,Andreas Skov Olsen,Denmark,3436,denmark,andreas skov olsen,432982,Andreas Skov Olsen,Denmark,1.000,exact,matched
+10349,Mehmet Zeki Çelik,Turkey,3381,turkey,mehmet zeki celik,251075,Zeki Çelik,Turkiye,1.000,exact,matched
+11603,Mario Pašalić,Croatia,3556,croatia,mario pasalic,205938,Mario Pašalić,Croatia,1.000,exact,matched
+15859,Bartosz Slisz,Poland,3442,poland,bartosz slisz,382429,Bartosz Slisz,Poland,1.000,exact,matched
+31093,Mateo Retegui,Italy,3376,italy,mateo retegui,554903,Mateo Retegui,Italy,1.000,exact,matched
+9000,Eberechi Eze,England,3299,england,eberechi eze,479999,Eberechi Eze,England,1.000,exact,matched
+8792,Mattia Zaccagni,Italy,3376,italy,mattia zaccagni,283735,Mattia Zaccagni,Italy,1.000,exact,matched
+7663,Adam Buksa,Poland,3442,poland,adam buksa,267160,Adam Buksa,Poland,1.000,exact,matched
+12510,Ryan Christie,Scotland,3380,scotland,ryan christie,188077,Ryan Christie,Scotland,1.000,exact,matched
+49007,Kwadwo Duah,Switzerland,3384,switzerland,kwadwo duah,254955,Kwadwo Duah,Switzerland,1.000,exact,matched
+32985,Mojmír Chytil,Czech Republic,3445,czech republic,mojmir chytil,405855,Mojmír Chytil,Czechia,1.000,exact,matched
+398886,Giorgi Gvelesiani,Georgia,3669,georgia,giorgi gvelesiani,156662,Giorgi Gvelesiani,Georgia,1.000,exact,matched
+34599,Florinel Teodor Coman,Romania,3447,romania,florinel teodor coman,340982,Florinel Coman,Romania,1.000,exact,matched
+28239,Adam Hložek,Czech Republic,3445,czech republic,adam hlozek,552057,Adam Hlozek,Czechia,1.000,exact,matched
+32712,Jeremie Frimpong,Netherlands,3379,netherlands,jeremie frimpong,484547,Jeremie Frimpong,Netherlands,1.000,exact,matched
+30940,Jure Balkovec,Slovenia,3588,slovenia,jure balkovec,181410,Jure Balkovec,Slovenia,1.000,exact,matched
+29531,Taulant Sulejmanov,Albania,3561,albania,taulant sulejmanov,254985,Taulant Seferi,Albania,1.000,exact,matched
+31887,Endre Botka,Hungary,3468,hungary,endre botka,148810,Endre Botka,Hungary,1.000,exact,matched
+36885,Armando Broja,Albania,3561,albania,armando broja,571743,Armando Broja,Albania,1.000,exact,matched
+6319,Luka Jović,Serbia,3438,serbia,luka jovic,257462,Luka Jović,Serbia,1.000,exact,matched
+4127,David Raya Martin,Spain,3375,spain,david raya martin,262749,David Raya,Spain,1.000,exact,matched
+7693,Bruno Petković,Croatia,3556,croatia,bruno petkovic,256358,Bruno Petkovic,Croatia,1.000,exact,matched
+8836,Karol Świderski,Poland,3442,poland,karol swiderski,330126,Karol Świderski,Poland,1.000,exact,matched
+30442,Altay Bayındır,Turkey,3381,turkey,altay bayindir,336077,Altay Bayındır,Turkiye,1.000,exact,matched
+11416,Jon Gorenc Stankovič,Slovenia,3588,slovenia,jon gorenc stankovic,245034,Jon Gorenc Stankovic,Slovenia,1.000,exact,matched
+29484,Jan Kuchta,Czech Republic,3445,czech republic,jan kuchta,334802,Jan Kuchta,Czechia,1.000,exact,matched
+11508,Łukasz Skorupski,Poland,3442,poland,ukasz skorupski,80894,Lukasz Skorupski,Poland,1.000,exact,matched
+21390,Andriy Lunin,Ukraine,3699,ukraine,andriy lunin,404839,Andriy Lunin,Ukraine,1.000,exact,matched

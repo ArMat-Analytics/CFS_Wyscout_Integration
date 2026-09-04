@@ -1,0 +1,52 @@
+competition_id,team_season,team_id,team_name,matchday,date,time,home_team_id,home_team_name,away_team_id,away_team_name,system_of_play,coach_name,coach_id,attendance,result,result_color,match_report_id,canonical_team_name,canonical_home_team_name,canonical_away_team_name
+EURO,2024,3262,Germany,Group A,Fri 14/06/2024,9:00 PM,3262,Germany,3380,Scotland,4-2-3-1,Julian Nagelsmann,8402,65.052,5:1,green,4235807,Germany,Germany,Scotland
+EURO,2024,3262,Germany,Group A,Wed 19/06/2024,6:00 PM,3262,Germany,3468,Hungary,4-2-3-1,Julian Nagelsmann,8402,54.000,2:0,green,4235819,Germany,Germany,Hungary
+EURO,2024,3262,Germany,Round of 16,Sat 29/06/2024,9:00 PM,3262,Germany,3436,Denmark,4-2-3-1,Julian Nagelsmann,8402,61.612,2:0,green,4359329,Germany,Germany,Denmark
+EURO,2024,3299,England,Group C,Tue 25/06/2024,9:00 PM,3299,England,3588,Slovenia,4-3-3 Attacking,Gareth Southgate,3358,41.536,0:0,,4235836,England,England,Slovenia
+EURO,2024,3299,England,Round of 16,Sun 30/06/2024,6:00 PM,3299,England,3503,Slovakia,4-3-3 Attacking,Gareth Southgate,3358,47.244,2:1 AET,green,4359331,England,England,Slovakia
+EURO,2024,3299,England,Quarter-Finals,Sat 06/07/2024,6:00 PM,3299,England,3384,Switzerland,3-4-2-1,Gareth Southgate,3358,46.907,6:4 on pens,green,4359338,England,England,Switzerland
+EURO,2024,3300,Portugal,Group F,Tue 18/06/2024,9:00 PM,3300,Portugal,3445,Czechia,3-4-3,Roberto Martínez,4328,38.421,2:1,green,4235818,Portugal,Portugal,Czech Republic
+EURO,2024,3300,Portugal,Round of 16,Mon 01/07/2024,9:00 PM,3300,Portugal,3588,Slovenia,4-2-3-1,Roberto Martínez,4328,46.576,3:0 on pens,green,4359332,Portugal,Portugal,Slovenia
+EURO,2024,3300,Portugal,Quarter-Finals,Fri 05/07/2024,9:00 PM,3300,Portugal,3377,France,4-2-3-1,Roberto Martínez,4328,47.789,3:5 on pens,red,4359337,Portugal,Portugal,France
+EURO,2024,3375,Spain,Group B,Sat 15/06/2024,6:00 PM,3375,Spain,3556,Croatia,4-3-3 Attacking,Luis de la Fuente,20031,68.844,3:0,green,4235809,Spain,Spain,Croatia
+EURO,2024,3375,Spain,Group B,Thu 20/06/2024,9:00 PM,3375,Spain,3376,Italy,4-3-3 Attacking,Luis de la Fuente,20031,49.528,1:0,green,4235822,Spain,Spain,Italy
+EURO,2024,3375,Spain,Round of 16,Sun 30/06/2024,9:00 PM,3375,Spain,3669,Georgia,4-3-3 Attacking,Luis de la Fuente,20031,42.233,4:1,green,4359330,Spain,Spain,Georgia
+EURO,2024,3375,Spain,Quarter-Finals,Fri 05/07/2024,6:00 PM,3375,Spain,3262,Germany,4-3-3 Attacking,Luis de la Fuente,20031,54.000,2:1 AET,green,4359336,Spain,Spain,Germany
+EURO,2024,3375,Spain,Semi-Finals,Tue 09/07/2024,9:00 PM,3375,Spain,3377,France,4-3-3 Attacking,Luis de la Fuente,20031,62.042,2:1,green,4359340,Spain,Spain,France
+EURO,2024,3375,Spain,Final,Sun 14/07/2024,9:00 PM,3375,Spain,3299,England,4-3-3 Attacking,Luis de la Fuente,20031,65.600,2:1,green,4359342,Spain,Spain,England
+EURO,2024,3376,Italy,Group B,Sat 15/06/2024,9:00 PM,3376,Italy,3561,Albania,4-2-3-1,Luciano Spalletti,517,60.512,2:1,green,4235810,Italy,Italy,Albania
+EURO,2024,3377,France,Group D,Tue 25/06/2024,6:00 PM,3377,France,3442,Poland,4-3-3 Attacking,Didier Deschamps,1229,59.728,1:1,,4235838,France,France,Poland
+EURO,2024,3377,France,Round of 16,Mon 01/07/2024,6:00 PM,3377,France,3382,Belgium,4-3-3 Attacking,Didier Deschamps,1229,46.810,1:0,green,4359333,France,France,Belgium
+EURO,2024,3379,Netherlands,Group D,Fri 21/06/2024,9:00 PM,3379,Netherlands,3377,France,4-3-3 Defending,Ronald Koeman,439,38.531,0:0,,4235826,Netherlands,Netherlands,France
+EURO,2024,3379,Netherlands,Group D,Tue 25/06/2024,6:00 PM,3379,Netherlands,3383,Austria,4-3-3 Defending,Ronald Koeman,439,68.363,2:3,red,4235837,Netherlands,Netherlands,Austria
+EURO,2024,3379,Netherlands,Quarter-Finals,Sat 06/07/2024,9:00 PM,3379,Netherlands,3381,Turkiye,4-2-3-1,Ronald Koeman,439,70.091,2:1,green,4359339,Netherlands,Netherlands,Turkey
+EURO,2024,3379,Netherlands,Semi-Finals,Wed 10/07/2024,9:00 PM,3379,Netherlands,3299,England,4-2-3-1,Ronald Koeman,439,60.926,1:2,red,4359341,Netherlands,Netherlands,England
+EURO,2024,3380,Scotland,Group A,Wed 19/06/2024,9:00 PM,3380,Scotland,3384,Switzerland,3-4-1-2,Steve Clarke,2638,42.711,1:1,,4235820,Scotland,Scotland,Switzerland
+EURO,2024,3380,Scotland,Group A,Sun 23/06/2024,9:00 PM,3380,Scotland,3468,Hungary,3-4-2-1,Steve Clarke,2638,54.000,0:1,red,4235831,Scotland,Scotland,Hungary
+EURO,2024,3381,Turkiye,Group F,Tue 18/06/2024,6:00 PM,3381,Turkiye,3669,Georgia,4-2-3-1,Vincenzo Montella,11795,59.127,3:1,green,4235817,Turkey,Turkey,Georgia
+EURO,2024,3381,Turkiye,Group F,Sat 22/06/2024,6:00 PM,3381,Turkiye,3300,Portugal,4-2-3-1,Vincenzo Montella,11795,61.047,0:3,red,4235829,Turkey,Turkey,Portugal
+EURO,2024,3382,Belgium,Group E,Mon 17/06/2024,6:00 PM,3382,Belgium,3503,Slovakia,4-2-3-1,Domenico Tedesco,30857,45.181,0:1,red,4235815,Belgium,Belgium,Slovakia
+EURO,2024,3382,Belgium,Group E,Sat 22/06/2024,9:00 PM,3382,Belgium,3447,Romania,4-2-3-1,Domenico Tedesco,30857,42.535,2:0,green,4235828,Belgium,Belgium,Romania
+EURO,2024,3383,Austria,Group D,Mon 17/06/2024,9:00 PM,3383,Austria,3377,France,4-2-3-1,Ralf Rangnick,196,46.425,0:1,red,4235814,Austria,Austria,France
+EURO,2024,3383,Austria,Round of 16,Tue 02/07/2024,9:00 PM,3383,Austria,3381,Turkiye,4-2-3-1,Ralf Rangnick,196,38.305,1:2,red,4359335,Austria,Austria,Turkey
+EURO,2024,3384,Switzerland,Group A,Sun 23/06/2024,9:00 PM,3384,Switzerland,3262,Germany,3-4-2-1,Murat Yakin,3240,46.685,1:1,,4235832,Switzerland,Switzerland,Germany
+EURO,2024,3384,Switzerland,Round of 16,Sat 29/06/2024,6:00 PM,3384,Switzerland,3376,Italy,3-4-2-1,Murat Yakin,3240,68.172,2:0,green,4365408,Switzerland,Switzerland,Italy
+EURO,2024,3436,Denmark,Group C,Thu 20/06/2024,6:00 PM,3436,Denmark,3299,England,3-4-1-2,Kasper Hjulmand,5372,46.177,1:1,,4235824,Denmark,Denmark,England
+EURO,2024,3436,Denmark,Group C,Tue 25/06/2024,9:00 PM,3436,Denmark,3438,Serbia,3-4-1-2,Kasper Hjulmand,5372,64.288,0:0,,4235835,Denmark,Denmark,Serbia
+EURO,2024,3438,Serbia,Group C,Sun 16/06/2024,9:00 PM,3438,Serbia,3299,England,3-4-1-2,Dragan Stojkovic,5528,48.953,0:1,red,4235812,Serbia,Serbia,England
+EURO,2024,3442,Poland,Group D,Sun 16/06/2024,3:00 PM,3442,Poland,3379,Netherlands,3-5-2 flat,Michal Probierz,3623,48.117,1:2,red,4235813,Poland,Poland,Netherlands
+EURO,2024,3442,Poland,Group D,Fri 21/06/2024,6:00 PM,3442,Poland,3383,Austria,3-5-2 flat,Michal Probierz,3623,69.455,1:3,red,4235825,Poland,Poland,Austria
+EURO,2024,3445,Czechia,Group F,Wed 26/06/2024,9:00 PM,3445,Czechia,3381,Turkiye,3-4-2-1,Ivan Hasek,3263,47.683,1:2,red,4235842,Czech Republic,Czech Republic,Turkey
+EURO,2024,3447,Romania,Group E,Mon 17/06/2024,3:00 PM,3447,Romania,3699,Ukraine,4-3-3 Attacking,Edward Iordănescu,22740,61.591,3:0,green,4235816,Romania,Romania,Ukraine
+EURO,2024,3447,Romania,Round of 16,Tue 02/07/2024,6:00 PM,3447,Romania,3379,Netherlands,4-1-4-1,Edward Iordănescu,22740,65.012,0:3,red,4359334,Romania,Romania,Netherlands
+EURO,2024,3468,Hungary,Group A,Sat 15/06/2024,3:00 PM,3468,Hungary,3384,Switzerland,3-4-2-1,Marco Rossi,16090,41.676,1:3,red,4235808,Hungary,Hungary,Switzerland
+EURO,2024,3503,Slovakia,Group E,Fri 21/06/2024,3:00 PM,3503,Slovakia,3699,Ukraine,4-3-3 Attacking,Francesco Calzona,33804,43.910,1:2,red,4235827,Slovakia,Slovakia,Ukraine
+EURO,2024,3503,Slovakia,Group E,Wed 26/06/2024,6:00 PM,3503,Slovakia,3447,Romania,4-3-3 Attacking,Francesco Calzona,33804,45.033,1:1,,4235839,Slovakia,Slovakia,Romania
+EURO,2024,3556,Croatia,Group B,Wed 19/06/2024,3:00 PM,3556,Croatia,3561,Albania,4-3-3 Attacking,Zlatko Dalic,2711,46.784,2:2,,4235821,Croatia,Croatia,Albania
+EURO,2024,3556,Croatia,Group B,Mon 24/06/2024,9:00 PM,3556,Croatia,3376,Italy,4-3-3 Attacking,Zlatko Dalic,2711,38.322,1:1,,4235833,Croatia,Croatia,Italy
+EURO,2024,3561,Albania,Group B,Mon 24/06/2024,9:00 PM,3561,Albania,3375,Spain,4-2-3-1,Sylvinho,24104,46.586,0:1,red,4235834,Albania,Albania,Spain
+EURO,2024,3588,Slovenia,Group C,Sun 16/06/2024,6:00 PM,3588,Slovenia,3436,Denmark,4-4-2,Matjaz Kek,1519,54.000,1:1,,4235811,Slovenia,Slovenia,Denmark
+EURO,2024,3588,Slovenia,Group C,Thu 20/06/2024,3:00 PM,3588,Slovenia,3438,Serbia,4-4-2,Matjaz Kek,1519,63.028,1:1,,4235823,Slovenia,Slovenia,Serbia
+EURO,2024,3669,Georgia,Group F,Sat 22/06/2024,3:00 PM,3669,Georgia,3445,Czechia,3-4-3,Willy Sagnol,12806,46.524,1:1,,4235830,Georgia,Georgia,Czech Republic
+EURO,2024,3669,Georgia,Group F,Wed 26/06/2024,9:00 PM,3669,Georgia,3300,Portugal,5-3-2,Willy Sagnol,12806,49.616,2:0,green,4235841,Georgia,Georgia,Portugal
+EURO,2024,3699,Ukraine,Group E,Wed 26/06/2024,6:00 PM,3699,Ukraine,3382,Belgium,5-3-2,Sergiy Rebrov,10892,54.000,0:0,,4235840,Ukraine,Ukraine,Belgium

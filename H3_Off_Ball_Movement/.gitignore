@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Notebook backups (do not commit local snapshots)
+*.ipynb.bak.*
+
+# Environments
+.venv/
+venv/
+env/
+.env
+
+# OS
+.DS_Store
+Thumbs.db
+.Rhistory
+
+# StatsBomb 360 frame caches (regenerable, multi-MB parquet files)
+data/cache/
+
+# IDE
+.vscode/
+.idea/
+*.swp
