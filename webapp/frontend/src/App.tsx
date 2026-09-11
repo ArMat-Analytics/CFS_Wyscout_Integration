@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation, useNavigate } from 'react-router-dom';
 import PlayerList from './components/PlayerList';
-import TeamList from './components/TeamList';
 import SearchBar from './components/SearchBar';
 import Filters, { type FilterState } from './components/Filters';
 import PlayerProfile from './pages/PlayerProfile';
@@ -57,9 +56,8 @@ function NavLink({ to, children }: { to: string; children: React.ReactNode }) {
   return (
     <Link
       to={to}
-      className={`font-semibold text-xs sm:text-sm uppercase tracking-wider transition-colors ${
-        active ? 'text-[var(--accent)]' : 'text-[var(--text-muted)] hover:text-[var(--text)]'
-      }`}
+      className={`font-semibold text-xs sm:text-sm uppercase tracking-wider transition-colors ${active ? 'text-[var(--accent)]' : 'text-[var(--text-muted)] hover:text-[var(--text)]'
+        }`}
     >
       {children}
     </Link>
@@ -98,10 +96,10 @@ function CommandPalette({ open, onClose }: { open: boolean; onClose: () => void 
   const lowerQ = debouncedQuery.toLowerCase().trim();
   const filtered = lowerQ
     ? players.filter(p =>
-        p.player_name.toLowerCase().includes(lowerQ) ||
-        (p.source_team_name ?? '').toLowerCase().includes(lowerQ) ||
-        (p.primary_role ?? '').toLowerCase().includes(lowerQ)
-      ).slice(0, 12)
+      p.player_name.toLowerCase().includes(lowerQ) ||
+      (p.source_team_name ?? '').toLowerCase().includes(lowerQ) ||
+      (p.primary_role ?? '').toLowerCase().includes(lowerQ)
+    ).slice(0, 12)
     : [];
 
   // Reset active index when results change
@@ -190,24 +188,21 @@ function CommandPalette({ open, onClose }: { open: boolean; onClose: () => void 
                   key={p.player_id}
                   role="option"
                   aria-selected={activeIdx === i}
-                  className={`w-full flex items-center gap-3 px-5 py-2.5 text-left transition-colors cursor-pointer ${
-                    activeIdx === i ? 'bg-[var(--accent)] text-white' : 'hover:bg-[var(--surface2)] text-[var(--text)]'
-                  }`}
+                  className={`w-full flex items-center gap-3 px-5 py-2.5 text-left transition-colors cursor-pointer ${activeIdx === i ? 'bg-[var(--accent)] text-white' : 'hover:bg-[var(--surface2)] text-[var(--text)]'
+                    }`}
                   onClick={() => handleSelect(i)}
                   onMouseEnter={() => setActiveIdx(i)}
                 >
                   <span className="text-sm">⚽</span>
                   <div className="flex-1 min-w-0">
                     <p className="font-display font-bold text-sm leading-tight truncate">{p.player_name}</p>
-                    <p className={`text-[11px] truncate ${
-                      activeIdx === i ? 'text-white/70' : 'text-[var(--text-muted)]'
-                    }`}>
+                    <p className={`text-[11px] truncate ${activeIdx === i ? 'text-white/70' : 'text-[var(--text-muted)]'
+                      }`}>
                       {p.source_team_name}{p.primary_role ? ` · ${p.primary_role.replace(/_/g, ' ')}` : ''}
                     </p>
                   </div>
-                  <span className={`font-mono text-[10px] ${
-                    activeIdx === i ? 'text-white/60' : 'text-[var(--text-dim)]'
-                  }`}>↵</span>
+                  <span className={`font-mono text-[10px] ${activeIdx === i ? 'text-white/60' : 'text-[var(--text-dim)]'
+                    }`}>↵</span>
                 </button>
               ))}
             </>
@@ -227,17 +222,15 @@ function CommandPalette({ open, onClose }: { open: boolean; onClose: () => void 
                 key={s.path}
                 role="option"
                 aria-selected={activeIdx === idx}
-                className={`w-full flex items-center gap-3 px-5 py-2.5 text-left transition-colors cursor-pointer ${
-                  activeIdx === idx ? 'bg-[var(--accent)] text-white' : 'hover:bg-[var(--surface2)] text-[var(--text)]'
-                }`}
+                className={`w-full flex items-center gap-3 px-5 py-2.5 text-left transition-colors cursor-pointer ${activeIdx === idx ? 'bg-[var(--accent)] text-white' : 'hover:bg-[var(--surface2)] text-[var(--text)]'
+                  }`}
                 onClick={() => handleSelect(idx)}
                 onMouseEnter={() => setActiveIdx(idx)}
               >
                 <span className="text-sm">{s.icon}</span>
                 <span className="font-display font-bold text-sm">{s.label}</span>
-                <span className={`font-mono text-[10px] ml-auto ${
-                  activeIdx === idx ? 'text-white/60' : 'text-[var(--text-dim)]'
-                }`}>↵</span>
+                <span className={`font-mono text-[10px] ml-auto ${activeIdx === idx ? 'text-white/60' : 'text-[var(--text-dim)]'
+                  }`}>↵</span>
               </button>
             );
           })}
@@ -319,31 +312,31 @@ function Layout({ children }: { children: React.ReactNode }) {
             <NavLink to="/glossary">Glossary</NavLink>
           </div>
 
-          <div className="flex items-center gap-4 ml-auto md:ml-0">
+          <div className="flex items-center gap-3 sm:gap-4 ml-auto md:ml-0">
             <a
-              href="https://github.com/ArMat-Analytics/Contextual-Football-Scouting/blob/main/docs/paper/Paper.pdf"
+              href="https://github.com/ArMat-Analytics/CFS_Wyscout_Integration"
               target="_blank"
               rel="noreferrer"
-              className="flex items-center gap-1.5 font-semibold text-xs sm:text-sm uppercase tracking-wider transition-colors text-[var(--text-muted)] hover:text-[var(--text)]"
+              className="flex items-center gap-1.5 font-semibold text-xs sm:text-sm uppercase tracking-wider transition-colors text-[var(--text-muted)] hover:text-[var(--text)] px-2 py-1 rounded hover:bg-[var(--surface2)]"
+              title="Current Project GitHub Repository (Wyscout Integration Fork)"
             >
-              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                <polyline points="7 10 12 15 17 10" />
-                <line x1="12" y1="15" x2="12" y2="3" />
+              <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" aria-hidden>
+                <path d="M5 3.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0zm0 2.122a2.25 2.25 0 1 0-1.5 0v.878A2.25 2.25 0 0 0 5.75 8.5h1.5v2.128a2.251 2.251 0 1 0 1.5 0V8.5h1.5a2.25 2.25 0 0 0 2.25-2.25v-.878a2.25 2.25 0 1 0-1.5 0v.878a.75.75 0 0 1-.75.75h-4.5A.75.75 0 0 1 5 6.25v-.878zm3.75 7.378a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0zm3-8.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0z" />
               </svg>
-              <span className="hidden sm:inline">Download Paper</span>
+              <span className="hidden sm:inline">Fork Repo (Current Project)</span>
             </a>
 
             <a
               href="https://github.com/ArMat-Analytics/Contextual-Football-Scouting"
               target="_blank"
               rel="noreferrer"
-              className="flex items-center gap-1.5 font-semibold text-xs sm:text-sm uppercase tracking-wider transition-colors text-[var(--text-muted)] hover:text-[var(--text)]"
+              className="flex items-center gap-1.5 font-semibold text-xs sm:text-sm uppercase tracking-wider transition-colors text-[var(--text-muted)] hover:text-[var(--text)] px-2 py-1 rounded hover:bg-[var(--surface2)]"
+              title="Original Project GitHub Repository (Contextual Football Scouting)"
             >
               <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden>
-                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.74-1.33-1.74-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.14 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.21.7.82.58C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/>
+                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.74-1.33-1.74-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.14 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.21.7.82.58C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z" />
               </svg>
-              <span className="hidden sm:inline">GitHub</span>
+              <span className="hidden sm:inline">Original Project</span>
             </a>
 
           </div>
@@ -356,6 +349,30 @@ function Layout({ children }: { children: React.ReactNode }) {
             <NavLink to="/players">Search by Player</NavLink>
             <NavLink to="/search">Search by Attribute</NavLink>
             <NavLink to="/glossary">Glossary</NavLink>
+            <div className="pt-3 border-t border-[var(--border)] flex flex-col gap-3">
+              <a
+                href="https://github.com/ArMat-Analytics/CFS_Wyscout_Integration"
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center gap-2 text-xs uppercase tracking-wider font-semibold text-[var(--text-muted)] hover:text-[var(--text)]"
+              >
+                <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" aria-hidden>
+                  <path d="M5 3.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0zm0 2.122a2.25 2.25 0 1 0-1.5 0v.878A2.25 2.25 0 0 0 5.75 8.5h1.5v2.128a2.251 2.251 0 1 0 1.5 0V8.5h1.5a2.25 2.25 0 0 0 2.25-2.25v-.878a2.25 2.25 0 1 0-1.5 0v.878a.75.75 0 0 1-.75.75h-4.5A.75.75 0 0 1 5 6.25v-.878zm3.75 7.378a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0zm3-8.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0z" />
+                </svg>
+                Fork Repo (Current Project)
+              </a>
+              <a
+                href="https://github.com/ArMat-Analytics/Contextual-Football-Scouting"
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center gap-2 text-xs uppercase tracking-wider font-semibold text-[var(--text-muted)] hover:text-[var(--text)]"
+              >
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden>
+                  <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.74-1.33-1.74-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.14 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.21.7.82.58C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z" />
+                </svg>
+                Original Project (Main Repo)
+              </a>
+            </div>
           </div>
         )}
       </header>
@@ -379,7 +396,7 @@ function Layout({ children }: { children: React.ReactNode }) {
                 className="inline-flex items-center gap-1 font-semibold text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors"
               >
                 ArMat Analytics
-                <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden className="inline ml-0.5"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.74-1.33-1.74-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.14 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.21.7.82.58C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden className="inline ml-0.5"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.74-1.33-1.74-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.14 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.21.7.82.58C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z" /></svg>
               </a>
             </div>
           </div>
@@ -393,7 +410,7 @@ function Layout({ children }: { children: React.ReactNode }) {
                 className="inline-flex items-center gap-1 font-semibold text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors"
               >
                 Matteo Vezzoli
-                <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden className="inline ml-0.5"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden className="inline ml-0.5"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z" /></svg>
               </a>
               <span>{'&'}</span>
               <a
@@ -403,7 +420,7 @@ function Layout({ children }: { children: React.ReactNode }) {
                 className="inline-flex items-center gap-1 font-semibold text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors"
               >
                 Armando Mio
-                <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden className="inline ml-0.5"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden className="inline ml-0.5"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z" /></svg>
               </a>
             </div>
           </div>
@@ -418,9 +435,7 @@ function Layout({ children }: { children: React.ReactNode }) {
 
 // ── Search by Player page ─────────────────────────────────────────────────────
 function SearchByPlayer() {
-  const [searchTerm, setSearchTerm]       = useState('');
-  const [selectedTeams, setSelectedTeams] = useState<string[]>([]);
-  const [isTeamListOpen, setIsTeamListOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
   const [filters, setFilters] = useState<FilterState>({
     ageMin: '', ageMax: '', macroRole: '', role: '', foot: '',
     vPreMin: '', vPreMax: '', vPostMin: '', vPostMax: '', vDiffMin: '', vDiffMax: '',
@@ -451,31 +466,13 @@ function SearchByPlayer() {
       {/* Search + Filters */}
       <div className="max-w-[1200px] mx-auto w-full px-6 pt-6 pb-4 flex flex-col sm:flex-row gap-3">
         <div className="flex-1"><SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} /></div>
-        <div className="grid grid-cols-2 sm:flex gap-3 w-full sm:w-auto">
-          <div className="sm:hidden">
-            <button
-              onClick={() => setIsTeamListOpen(!isTeamListOpen)}
-              className={`btn btn-ghost w-full h-full justify-center whitespace-nowrap ${selectedTeams.length > 0 ? 'border-[var(--accent)] text-[var(--accent)]' : ''}`}
-              aria-expanded={isTeamListOpen}
-            >
-              <svg className="w-4 h-4 mr-1.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" />
-              </svg>
-              <span className="truncate">Nations {selectedTeams.length > 0 && `(${selectedTeams.length})`}</span>
-            </button>
-          </div>
-          <div className="w-full sm:w-auto max-sm:[&>div]:w-full max-sm:[&>div>button]:w-full max-sm:[&>div>button]:justify-center">
-            <Filters filters={filters} setFilters={setFilters} />
-          </div>
+        <div className="w-full sm:w-auto">
+          <Filters filters={filters} setFilters={setFilters} />
         </div>
       </div>
 
-      <div className={`sm:block ${isTeamListOpen ? 'block' : 'hidden'}`}>
-        <TeamList selectedTeams={selectedTeams} setSelectedTeams={setSelectedTeams} />
-      </div>
-
       <div className="max-w-[1200px] mx-auto w-full px-6" aria-label="Player list">
-        <PlayerList searchTerm={searchTerm} selectedTeams={selectedTeams} filters={filters} />
+        <PlayerList searchTerm={searchTerm} filters={filters} />
       </div>
     </div>
   );
@@ -487,12 +484,12 @@ export default function App() {
     <Router>
       <Layout>
         <Routes>
-          <Route path="/"                 element={<Home />} />
-          <Route path="/players"          element={<SearchByPlayer />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/players" element={<SearchByPlayer />} />
           <Route path="/player/:playerId" element={<PlayerProfile />} />
-          <Route path="/similar"          element={<SimilarPlayers />} />
-          <Route path="/search"           element={<SearchByAttribute />} />
-          <Route path="/glossary"         element={<Glossary />} />
+          <Route path="/similar" element={<SimilarPlayers />} />
+          <Route path="/search" element={<SearchByAttribute />} />
+          <Route path="/glossary" element={<Glossary />} />
         </Routes>
       </Layout>
     </Router>

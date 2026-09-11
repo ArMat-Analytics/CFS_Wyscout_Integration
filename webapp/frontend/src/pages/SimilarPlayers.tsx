@@ -4,7 +4,7 @@ import {
   RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis,
   Tooltip, Legend, ResponsiveContainer,
 } from 'recharts';
-import { getFlagUrl, formatMarketValue, getMarketTrendArrow } from '../utils';
+import { getFlagUrl, getTeamBallEmoji, formatMarketValue } from '../utils';
 import {
   useSimilarPlayers, usePlayerSpaceControl,
   type SpaceControlIndex, type SpaceControlAggregated,
@@ -13,8 +13,6 @@ import { StatViewToggle, type StatViewMode } from '../components/SpaceControlSec
 import { TOOLTIP_DESCRIPTIONS } from '../data/tooltip';
 import { usePlayerDecisionQuality } from '../hooks/useDecisionQuality';
 import { DQCompareRadar } from '../components/DecisionQualitySection';
-import { usePlayerOffBallMovement } from '../hooks/useOffBallMovement';
-import { OBCompareRadar } from '../components/OffBallSection';
 
 // ── Palette ───────────────────────────────────────────────────────────────────
 
@@ -509,32 +507,12 @@ export function parseMarketValue(val: string | null | undefined): number | null 
   return isNaN(num) ? null : num * factor;
 }
 
-function renderMarketValue(pre: string | null | undefined, post: string | null | undefined) {
-  if (!pre) return null;
-  const preNum = parseMarketValue(pre);
-  const postNum = parseMarketValue(post);
-  let arrow = null;
-  let arrowColor = '';
-
-  if (preNum && postNum) {
-    if (postNum > preNum) {
-      arrow = '▲';
-      arrowColor = 'text-green-600 font-bold ml-1';
-    } else if (postNum < preNum) {
-      arrow = '▼';
-      arrowColor = 'text-red-600 font-bold ml-1';
-    }
-  }
-
+function renderMarketValue(val: string | null | undefined) {
+  if (!val) return null;
   return (
-    <span className="px-2.5 py-1 rounded border border-[var(--border)] bg-[var(--surface)] shadow-sm text-xs font-semibold text-[var(--text-muted)] flex flex-wrap items-center gap-1">
-      <span>Pre-Euro: <strong className="text-[var(--text)]">{pre}</strong></span>
-      {post && (
-        <span className="text-[11px] text-[var(--text-dim)] flex items-center">
-          (Post: {post}
-          {arrow && <span className={arrowColor}>{arrow}</span>})
-        </span>
-      )}
+    <span className="px-2.5 py-1 rounded border border-[var(--border)] bg-[var(--surface)] shadow-sm text-xs font-semibold text-[var(--text-muted)] flex items-center gap-1.5">
+      <span>Market Value:</span>
+      <strong className="font-mono text-[var(--accent)] font-bold">{val}</strong>
     </span>
   );
 }
@@ -582,7 +560,6 @@ export default function SimilarPlayers() {
   const [selectedIdx, setSelectedIdx] = useState(0);
   const [statMode, setStatMode] = useState<StatViewMode>('raw');
   const [dqMode, setDqMode] = useState<StatViewMode>('raw');
-  const [obMode, setObMode] = useState<StatViewMode>('raw');
 
   const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
 
@@ -597,13 +574,9 @@ export default function SimilarPlayers() {
     playerId ?? undefined,
   );
   const { data: sourceDQ } = usePlayerDecisionQuality(playerId ?? undefined);
-  const { data: sourceOB } = usePlayerOffBallMovement(playerId ?? undefined);
 
   const selectedPlayer = similarList[selectedIdx] ?? null;
   const { data: compareDQ } = usePlayerDecisionQuality(
-    selectedPlayer?.player_id != null ? String(selectedPlayer.player_id) : undefined,
-  );
-  const { data: compareOB } = usePlayerOffBallMovement(
     selectedPlayer?.player_id != null ? String(selectedPlayer.player_id) : undefined,
   );
   const sourceIdx = sourceScData?.indices ?? null;
@@ -735,10 +708,18 @@ export default function SimilarPlayers() {
                         {playerName}
                       </h1>
                       <div className="flex flex-wrap gap-2 items-center">
-                        {searchParams.get('playerTeam') && (
-                          <span className="px-2.5 py-1 rounded border border-[var(--border)] bg-[var(--surface)] shadow-sm text-xs font-bold text-[var(--text-muted)] flex items-center gap-2">
-                            {getFlagUrl(searchParams.get('playerTeam')!) && <img src={getFlagUrl(searchParams.get('playerTeam')!)!} alt="" className="w-4 h-3 object-cover rounded-[2px]" aria-hidden />}
-                            {searchParams.get('playerTeam')}
+                        {(searchParams.get('playerTeam') || sourceIdx?.team) && (
+                          <span className="px-2.5 py-1 rounded border border-[var(--border)] bg-[var(--surface)] shadow-sm text-xs font-bold text-[var(--text-muted)] flex items-center gap-1.5">
+                            <span className="text-xs" aria-hidden>{getTeamBallEmoji(searchParams.get('playerTeam') || sourceIdx?.team)}</span>
+                            <span>{searchParams.get('playerTeam') || sourceIdx?.team}</span>
+                          </span>
+                        )}
+                        {sourceIdx?.birth_country && (
+                          <span className="px-2.5 py-1 rounded border border-[var(--border)] bg-[var(--surface)] shadow-sm text-xs font-semibold text-[var(--text)] flex items-center gap-1.5">
+                            {getFlagUrl(sourceIdx.birth_country) && (
+                              <img src={getFlagUrl(sourceIdx.birth_country)!} alt={sourceIdx.birth_country} className="w-4 h-3 object-cover rounded-[2px]" aria-hidden />
+                            )}
+                            <span>{sourceIdx.birth_country}</span>
                           </span>
                         )}
                         {macroRole && (
@@ -761,7 +742,7 @@ export default function SimilarPlayers() {
                             Age: {sourceIdx.age}
                           </span>
                         )}
-                        {renderMarketValue(sourceIdx?.market_value_before_euros, sourceIdx?.market_value_after_euros)}
+                        {renderMarketValue(sourceIdx?.market_value_euros || sourceIdx?.market_value_before_euros)}
                       </div>
                     </div>
                   </div>
@@ -847,9 +828,17 @@ export default function SimilarPlayers() {
                           </h1>
                           <div className="flex flex-wrap justify-start lg:justify-end gap-2 items-center">
                             {selectedPlayer.team && (
-                              <span className="px-2.5 py-1 rounded border border-[var(--border)] bg-[var(--surface)] shadow-sm text-xs font-bold text-[var(--text-muted)] flex items-center gap-2">
-                                {getFlagUrl(selectedPlayer.team) && <img src={getFlagUrl(selectedPlayer.team)!} alt="" className="w-4 h-3 object-cover rounded-[2px]" aria-hidden />}
-                                {selectedPlayer.team}
+                              <span className="px-2.5 py-1 rounded border border-[var(--border)] bg-[var(--surface)] shadow-sm text-xs font-bold text-[var(--text-muted)] flex items-center gap-1.5">
+                                <span className="text-xs" aria-hidden>{getTeamBallEmoji(selectedPlayer.team)}</span>
+                                <span>{selectedPlayer.team}</span>
+                              </span>
+                            )}
+                            {selectedPlayer.birth_country && (
+                              <span className="px-2.5 py-1 rounded border border-[var(--border)] bg-[var(--surface)] shadow-sm text-xs font-semibold text-[var(--text)] flex items-center gap-1.5">
+                                {getFlagUrl(selectedPlayer.birth_country) && (
+                                  <img src={getFlagUrl(selectedPlayer.birth_country)!} alt={selectedPlayer.birth_country} className="w-4 h-3 object-cover rounded-[2px]" aria-hidden />
+                                )}
+                                <span>{selectedPlayer.birth_country}</span>
                               </span>
                             )}
                             {macroRole && (
@@ -872,8 +861,8 @@ export default function SimilarPlayers() {
                                 Age: {selectedPlayer.age}
                               </span>
                             )}
-                            {renderMarketValue(selectedPlayer.market_value_before_euros, selectedPlayer.market_value_after_euros)}
-                            {renderPriceDelta(sourceIdx?.market_value_before_euros, selectedPlayer.market_value_before_euros)}
+                            {renderMarketValue(selectedPlayer.market_value_euros || selectedPlayer.market_value_before_euros)}
+                            {renderPriceDelta(sourceIdx?.market_value_euros || sourceIdx?.market_value_before_euros, selectedPlayer.market_value_euros || selectedPlayer.market_value_before_euros)}
                           </div>
                         </div>
                       </div>
@@ -1012,30 +1001,6 @@ export default function SimilarPlayers() {
                   </div>
                 </section>
 
-                {/* Off-Ball Movement panel (single OB radar) */}
-                <section className="max-w-[1200px] mx-auto px-0 pb-12 mt-8">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
-                    <div>
-                      <h2 className="font-display font-black text-xl text-[var(--text)] mb-1">Off-Ball Movement</h2>
-                      <p className="text-xs text-[var(--text-muted)]">Selected players metrics — {playerName.trim().split(' ').pop()} · {selectedPlayer.player.trim().split(' ').pop()}</p>
-                    </div>
-                    <StatViewToggle mode={obMode} onChange={setObMode} />
-                  </div>
-
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-                    {sourceOB && compareOB ? (
-                      <OBCompareRadar
-                        sourceRow={sourceOB}
-                        compareRow={compareOB}
-                        sourceName={playerName}
-                        compareName={selectedPlayer?.player ?? 'Comparison player'}
-                        mode={obMode}
-                      />
-                    ) : (
-                      <div className="col-span-2 text-sm text-[var(--text-muted)]">Off-Ball Movement data not available for one of the players.</div>
-                    )}
-                  </div>
-                </section>
               </>
             )
           ) : sourceScLoading ? (
@@ -1091,25 +1056,11 @@ export default function SimilarPlayers() {
                         </>
                       )}
                       <span>{player.minutes_played}' played</span>
-                      {player.market_value_before_euros && (
+                      {(player.market_value_euros || player.market_value_before_euros) && (
                         <>
                           <span aria-hidden>·</span>
                           <span>
-                            Pre-Euro: {formatMarketValue(player.market_value_before_euros)}
-                            {player.market_value_after_euros ? (
-                              <>
-                                {' '}(Post: {formatMarketValue(player.market_value_after_euros)}
-                                {(() => {
-                                  const arrow = getMarketTrendArrow(player.market_value_before_euros, player.market_value_after_euros);
-                                  if (!arrow) return null;
-                                  const color = arrow === '▲' ? 'var(--win)' : 'var(--lose)';
-                                  return <span className="ml-1 font-bold" style={{ color }}>{arrow}</span>;
-                                })()}
-                                )
-                              </>
-                            ) : (
-                              ' (Post: —)'
-                            )}
+                            Value: {formatMarketValue((player.market_value_euros || player.market_value_before_euros)!)}
                           </span>
                         </>
                       )}

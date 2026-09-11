@@ -192,23 +192,15 @@ export default function Filters({ filters, setFilters }: FiltersProps) {
               <legend className="text-xs font-mono font-bold tracking-widest uppercase px-2 text-[var(--blue)]">
                 Market Value (€)
               </legend>
-              <div className="space-y-4 mt-2">
-                {[
-                  { label: 'Value BEFORE Euro 2024', minKey: 'vPreMin', maxKey: 'vPreMax' },
-                  { label: 'Value AFTER Euro 2024',  minKey: 'vPostMin', maxKey: 'vPostMax' },
-                  { label: 'Value Difference',       minKey: 'vDiffMin', maxKey: 'vDiffMax' },
-                ].map(({ label, minKey, maxKey }) => (
-                  <div key={minKey} className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label htmlFor={minKey} className="block text-[10px] font-semibold mb-1 text-[var(--text-muted)]">Min {label}</label>
-                      <input id={minKey} type="number" name={minKey} value={(draft as any)[minKey]} onChange={handleChange} placeholder="Min €" className="input" />
-                    </div>
-                    <div>
-                      <label htmlFor={maxKey} className="block text-[10px] font-semibold mb-1 text-[var(--text-muted)]">Max {label}</label>
-                      <input id={maxKey} type="number" name={maxKey} value={(draft as any)[maxKey]} onChange={handleChange} placeholder="Max €" className="input" />
-                    </div>
-                  </div>
-                ))}
+              <div className="grid grid-cols-2 gap-4 mt-2">
+                <div>
+                  <label htmlFor="vPreMin" className="block text-xs font-semibold mb-1 text-[var(--text-muted)]">Min Value (€)</label>
+                  <input id="vPreMin" type="number" name="vPreMin" value={draft.vPreMin} onChange={handleChange} placeholder="e.g. 5000000" className="input" />
+                </div>
+                <div>
+                  <label htmlFor="vPreMax" className="block text-xs font-semibold mb-1 text-[var(--text-muted)]">Max Value (€)</label>
+                  <input id="vPreMax" type="number" name="vPreMax" value={draft.vPreMax} onChange={handleChange} placeholder="e.g. 50000000" className="input" />
+                </div>
               </div>
             </fieldset>
           </div>

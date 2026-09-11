@@ -1,66 +1,55 @@
 const LIMITATIONS = [
-  // — The data is a snapshot, not a film —
+  // — Nature of the data —
   {
-    title: 'A single instant, not a film',
-    body: 'Each metric reads the pitch at the moment the pass is played, not the movement before it or the ball trajectory after. It describes the geometry of the decision, not how it unfolds. Speed at reception, acceleration, distance covered and pressing intensity over time cannot be measured, and a player standing in a dangerous zone scores the same as one sprinting into it at that instant.',
+    title: 'Aggregated seasonal metrics, not frame-by-frame tracking',
+    body: 'All metrics are derived from Wyscout seasonal aggregated match data (wyscout_sample.csv), rather than optical tracking coordinates or physical trajectory tracking. They capture seasonal execution volume, efficiency rates, and creative actions rather than instantaneous pitch geometry.',
   },
   {
-    title: 'Pressure read from distance alone',
-    body: 'A frame shows where defenders are, not their physical state: a defender 2 m away may be jogging or sprinting in to tackle, and the snapshot cannot tell them apart. Pressure here approximates threat from distance only.',
-  },
-  // — The frame sees little, and names no one —
-  {
-    title: 'Partial player coverage',
-    body: 'A 360 frame usually shows 8 to 12 of the 22 players, those near the ball. Players far from the action are often missing, so anything measured far from the ball is less reliable.',
+    title: 'Statistical proxies for tactical constructs',
+    body: 'The four Space Control dimensions (H1) and Decision Quality (H2) are modeled via statistical proxy mappings. For example, Dangerousness is proxied through Expected Goals and Expected Assists per 90, and Decision Quality through pass accuracy, duel success %, and incisive action volumes. These serve as robust directional indicators rather than physical measurements of defensive displacement or alternative teammate sets.',
   },
   {
-    title: 'Anonymous opponents and teammates',
-    body: 'Only the player on the ball is named; everyone else carries just a team tag. The model cannot weight opposition by quality, so beating a top defender counts the same as beating a weak one, and a pass into a dangerous zone is valued by the zone, not by who would receive it.',
+    title: 'Gravity as an inferential proxy',
+    body: 'In tracking data, gravity physically measures defender displacement towards a ball carrier. In aggregated seasonal data, it is approximated by fouls suffered/90 and offensive duels/90 under the rationale that drawing duels commands extra defensive attention, but it remains an inference rather than a coordinate-level centroid shift.',
   },
-  // — What the model leaves out —
+  // — Scope and sample —
   {
-    title: 'No game state',
-    body: 'Decisions are graded on value alone. Score, time left, match importance and manager instructions are ignored, so a deliberately safe choice late in a game reads as conservative rather than smart.',
-  },
-  {
-    title: 'Not every visible option is a real choice',
-    body: 'Decision Quality grades a pass against the teammates the player could reach in that frame. It treats every reachable option as part of the decision, but football is messier: some visible options are easy to reach yet tactically pointless, and the metric still counts them as choices the player beat. Options that are hard or impossible to complete are already down-weighted, since each one is scored by how likely the pass is to arrive, so the main gap is tactical: the model sees who was reachable, not whether passing there made sense. Read the score as how well the player ranked his pick among the available options, not as an absolute verdict on the pass.',
+    title: 'Sample context & 300-minute floor',
+    body: 'All data come from a curated Wyscout seasonal sample dataset. To ensure statistical reliability across per-90 rates, eligible outfield players are filtered with a threshold of at least 300 minutes played (yielding 1,059 players).',
   },
   {
-    title: 'Built on base models, shared across hypotheses',
-    body: 'The indices sit on top of an EPV model (adapted from Friends of Tracking) and a custom pass-completion model (built for H2 and reused by H3). Any error in these base models carries through into the metrics above them. And because H2 and H3 read H1\'s player pool, roles and EPV from the same files, a bias in those shared foundations would show up in all three at once rather than as a disagreement between them.',
-  },
-  // — Sample and validation —
-  {
-    title: 'Single tournament, small samples',
-    body: 'All data come from Euro 2024 alone, so patterns may not carry over to club football or other competitions. Players need at least 135 minutes (about 1.5 matches) to be included, and per-role pools are small: a low-sample player has a noisy ranking that can also nudge the players around him. The sample size is always shown so low-sample profiles can be discounted.',
+    title: 'Macro-role benchmarking',
+    body: 'Percentile rankings benchmark each player strictly within their macro-role (CB, FB, MID, CAM, WIDE, FW). While this prevents cross-positional distortions, hybrid or fluid tactical roles (e.g. inverted full-backs or roaming wingers) are evaluated against their primary registered positional bucket.',
   },
   {
-    title: 'Some things have no ground truth',
-    body: 'H2 compares the chosen pass against the alternatives the player could have played. Those alternatives were never actually played, so there is no real outcome to check them against; the index limits this by only needing the options ordered roughly right. H3 has a similar gap: the off-ball identities are reconstructed by estimating each anonymous teammate\'s position and matching it to their recent on-ball events. That is validated against StatsBomb\'s actual pass recipient and is accurate on the high-confidence assignments it keeps, but it remains an estimate, not a certainty.',
+    title: 'Team bias reduced, not completely eliminated',
+    body: 'Normalizing by 90 minutes and evaluating percentiles within macro-roles substantially reduces volume bias from dominant possession sides. However, tactical context still matters: players in sides that dominate territorial possession naturally record higher volumes in advanced zones than those in deep defensive setups.',
   },
   {
-    title: 'Off-ball score depends on teammates too',
-    body: 'The Uncapitalized Run Score counts an off-ball run only when teammates do not serve it, so part of the score reflects how well his teammates see and execute the pass, not the player alone: a good mover surrounded by weaker passers can post a high score because his runs keep going unused. This is by design, not an error. The score splits into Off-Ball Potential — the value he exposes, which is player-only — and Latency, the share left unserved, where teammates enter; the two are nearly independent, so read Potential for the cleanest individual signal and the headline as off-ball value in his current team context. Read this way it complements Decision Quality: one grades him as the passer, the other shows how often his own off-ball offers go unused.',
+    title: 'Single valuation snapshot for style matchmaking',
+    body: 'Market values in the dataset represent a single seasonal valuation snapshot. Player similarity (H4) identifies stylistic twins and market-value arbitrage based on this snapshot, without tracking subsequent transfer market value fluctuations.',
   },
   {
-    title: 'Team bias reduced, not removed',
-    body: 'Grading players by the value of what they do rather than the volume, and then ranking them within their role, removes most of the team bias that distorts raw stats. What it cannot remove is exposure: a player in a possession-dominant side still appears in more freeze frames, and gets more chances to add value, than an equal player in a pressed side.',
+    title: 'Absence of game state & match circumstances',
+    body: 'Seasonal totals aggregate all phases of play equally. The data does not isolate specific match scores, game state, tactical manager instructions, or minutes played when defending a lead versus chasing a deficit.',
   },
 ];
 
 const HYPOTHESES = [
   {
-    title: 'Space Control & Value',
-    body: 'It is posited that a player\'s quality is measurable by their spatial influence on the pitch. The methodology will explore the use of Convex Hulls to quantify defensive territorial control and evaluate an attacker\'s ability to penetrate it. Utilizing Expected Possession Value (EPV), the objective is to identify "Line Breakers", who are players capable of executing passes that bypass defensive structures and significantly elevate the probability of scoring.',
+    id: 'H1',
+    title: 'Space Control & Value (H1)',
+    body: 'Quantifies a player\'s ability to dominate territory and break lines through Progression, Dangerousness, Reception, and Gravity, establishing spatial influence within macro roles.',
   },
   {
-    title: 'Decision Quality',
-    body: 'Aggregate pass completion rates lack analytical value when devoid of contextual factors. This phase will analyze "Passing under Pressure" by measuring the proximity of defending players. The aim is to assess decision-making efficacy: specifically, whether the player selected the optimal passing lane relative to immediate defensive danger. This differentiation facilitates the separation of players who default to conservative actions from those who exhibit tactical astuteness under high cognitive load.',
+    id: 'H2',
+    title: 'Decision Quality (H2)',
+    body: 'Evaluates decision-making efficacy by combining technical accuracy, duel robustness, and high-value risk reading under cognitive load, separating conservative passers from decisive playmakers.',
   },
   {
-    title: 'Off-Ball Movement',
-    body: 'The vast majority of a player\'s on-pitch activity occurs out of possession. This investigation seeks to identify players executing high-value attacking runs that are ultimately not capitalized upon by teammates. Analyzing 360-degree spatial frames enables the detection of players who consistently occupy and attack dangerous areas, thereby quantifying a latent dimension of offensive contribution regardless of ball reception.',
+    id: 'H4',
+    title: 'Player Similarity (H4)',
+    body: 'Constructs an 8-axis stylistic DNA combining Space Control and Decision Quality dimensions, enabling within-role nearest-neighbour look-alike discovery and market-value arbitrage.',
   },
 ];
 
@@ -71,13 +60,48 @@ export default function Home() {
       {/* ── Hero ────────────────────────────────────────────────────────────── */}
       <div className="border-b border-[var(--border)] px-6 pt-10 pb-8 bg-[var(--surface)]">
         <div className="max-w-[1200px] mx-auto">
+          {/* Fork badge */}
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[var(--accent)]/40 bg-[var(--accent)]/10 text-xs font-mono font-medium text-[var(--accent)] mb-4">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <line x1="6" y1="3" x2="6" y2="15" />
+              <circle cx="18" cy="6" r="3" />
+              <circle cx="6" cy="18" r="3" />
+              <path d="M18 9a9 9 0 0 1-9 9" />
+            </svg>
+            <span>
+              Fork of{' '}
+              <a
+                href="https://github.com/ArMat-Analytics/Contextual-Football-Scouting"
+                target="_blank"
+                rel="noreferrer"
+                className="underline font-semibold hover:text-[var(--text)] transition-colors"
+              >
+                Contextual Football Scouting
+              </a>
+            </span>
+          </div>
+
           <h1 className="font-display font-black text-5xl sm:text-6xl leading-none tracking-tight text-[var(--text)]">
             Contextual<br />Football Scouting
+            <span className="block text-2xl sm:text-3xl font-semibold text-[var(--accent)] mt-2">
+              Wyscout Integration
+            </span>
           </h1>
+
           {/* Main title description */}
-          <p className="mt-3 text-base text-[var(--text-muted)] mb-6">
-            A new paradigm for football scouting: quantifying player value through context-aware analytics, advanced spatial data, and contextual decision quality. Discover the difference between individual talent and systemic advantage.
+          <p className="mt-4 text-base sm:text-lg text-[var(--text-muted)] mb-6 leading-relaxed">
+            This project is a dedicated <strong>fork</strong> of{' '}
+            <a
+              href="https://github.com/ArMat-Analytics/Contextual-Football-Scouting"
+              target="_blank"
+              rel="noreferrer"
+              className="font-semibold text-[var(--text)] hover:text-[var(--accent)] underline transition-colors"
+            >
+              Contextual Football Scouting
+            </a>
+            . It integrates the contextual scouting methodology with <strong>Wyscout seasonal aggregated data (<code className="text-xs bg-[var(--surface2)] px-1.5 py-0.5 rounded font-mono">data/wyscout_sample.csv</code>)</strong>, translating spatial influence and decision quality into statistical proxies processed <strong>100% in-memory</strong>.
           </p>
+
           {/* Separator line */}
           <div className="w-full h-px bg-[var(--border)] mb-8" />
           <div className="w-full">
@@ -101,7 +125,7 @@ export default function Home() {
               <h2 className="font-display font-bold text-[20px] text-[var(--text)] m-0">Our Objective</h2>
             </div>
             <p className="text-[16px] text-[var(--text-muted)] mb-5">
-              The primary objective of this project is to shift the analytical paradigm from descriptive to explanatory observations. By incorporating the geometric and spatial context provided by 360-degree data, we evaluate elements often obscured by standard statistics, such as optimal spatial positioning and the quality of a player's decisions relative to the defensive pressure around them. This methodology allows us to determine whether elite performance is a function of individual talent or systemic advantage, providing the optimal approach for uncovering undervalued talent currently operating within less prominent clubs.
+              The primary objective of this project is to shift the analytical paradigm from descriptive to explanatory observations. By mapping the contextual and spatial principles of the original framework onto Wyscout seasonal metrics, we evaluate player performance relative to role-specific benchmarks and defensive actions. This methodology allows scouts to uncover undervalued talent operating across different tactical setups.
             </p>
             {/* Who We Are */}
             <div className="flex items-start gap-3 mt-6 mb-1">
@@ -112,9 +136,9 @@ export default function Home() {
               <h2 className="font-display font-bold text-[20px] text-[var(--text)] m-0">Who We Are</h2>
             </div>
             <p className="text-[16px] text-[var(--text-muted)] leading-relaxed">
-              We are <a href="https://www.linkedin.com/in/matteo-vezzoli83" target="_blank" rel="noreferrer" className="inline-flex items-center gap-0.5 font-semibold text-[var(--text)] hover:text-[var(--accent)] transition-colors">Matteo Vezzoli<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a> and <a href="https://www.linkedin.com/in/armando-mio" target="_blank" rel="noreferrer" className="inline-flex items-center gap-0.5 font-semibold text-[var(--text)] hover:text-[var(--accent)] transition-colors">Armando Mio<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>, and we present this project as the culmination of our academic journey at the <a href="https://barcainnovationhub.fcbarcelona.com/" target="_blank" rel="noreferrer" className="inline-flex items-center gap-0.5 font-semibold text-[var(--text)] hover:text-[var(--accent)] transition-colors">Barça Innovation Hub<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>. Motivated by a rigorous interest in data science applied to football, our work focuses on uncovering the latent variables of a match that frequently escape standard statistical frameworks.
+              We are <a href="https://www.linkedin.com/in/matteo-vezzoli83" target="_blank" rel="noreferrer" className="inline-flex items-center gap-0.5 font-semibold text-[var(--text)] hover:text-[var(--accent)] transition-colors">Matteo Vezzoli<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a> and <a href="https://www.linkedin.com/in/armando-mio" target="_blank" rel="noreferrer" className="inline-flex items-center gap-0.5 font-semibold text-[var(--text)] hover:text-[var(--accent)] transition-colors">Armando Mio<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>, and we present this project as the culmination of our academic journey at the <a href="https://barcainnovationhub.fcbarcelona.com/" target="_blank" rel="noreferrer" className="inline-flex items-center gap-0.5 font-semibold text-[var(--text)] hover:text-[var(--accent)] transition-colors">Barça Innovation Hub<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>.
               <br /><br />
-              For more information, you can view our <a href="https://github.com/ArMat-Analytics/Contextual-Football-Scouting" target="_blank" rel="noreferrer" className="inline-flex items-center gap-0.5 font-semibold text-[var(--text)] hover:text-[var(--accent)] transition-colors">GitHub repository<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>.
+              For the full theoretical framing, research paper, and upstream methodology, visit the main <a href="https://github.com/ArMat-Analytics/Contextual-Football-Scouting" target="_blank" rel="noreferrer" className="inline-flex items-center gap-0.5 font-semibold text-[var(--text)] hover:text-[var(--accent)] transition-colors">Contextual Football Scouting repository<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>, or inspect this integration fork at <a href="https://github.com/ArMat-Analytics/CFS_Wyscout_Integration" target="_blank" rel="noreferrer" className="inline-flex items-center gap-0.5 font-semibold text-[var(--text)] hover:text-[var(--accent)] transition-colors">CFS_Wyscout_Integration<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>.
             </p>
           </div>
         </div>
@@ -138,14 +162,14 @@ export default function Home() {
 
           {/* Hypotheses list */}
           <ol className="flex flex-col divide-y divide-[var(--border)]" aria-label="Project Hypotheses">
-            {HYPOTHESES.map((item, i) => (
-              <li key={i} className="flex gap-5 sm:gap-8 py-5 items-baseline">
+            {HYPOTHESES.map((item) => (
+              <li key={item.id} className="flex gap-5 sm:gap-8 py-5 items-baseline">
                 {/* Number */}
                 <span
                   className="font-mono text-[15px] font-bold text-[var(--accent)] shrink-0 w-6 text-right select-none"
                   aria-hidden
                 >
-                  H{i + 1}
+                  {item.id}
                 </span>
                 {/* Content */}
                 <p className="text-[14px] text-[var(--text-muted)] leading-[1.7] m-0">
@@ -171,7 +195,7 @@ export default function Home() {
               Data scope and limitations
             </h2>
             <p className="text-[15px] leading-relaxed text-[var(--text-muted)]">
-              All metrics on this site come from StatsBomb 360 freeze-frame data combined with predictive models. This is what they can, and cannot, describe.
+              All metrics on this platform are computed from Wyscout seasonal aggregated data (<code className="text-xs bg-[var(--surface2)] px-1.5 py-0.5 rounded font-mono">wyscout_sample.csv</code>) using statistical proxy mappings and within-role percentile rankings.
             </p>
           </div>
 

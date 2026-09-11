@@ -14,7 +14,6 @@ const FILTER_OPTIONS: { key: FilterKey; label: string }[] = [
   { key: 'RECEPTION',       label: 'Reception' },
   { key: 'GRAVITY',         label: 'Gravity' },
   { key: 'DECISION_QUALITY',label: 'Decision Quality' },
-  { key: 'OFF_BALL_MOVEMENT',label: 'Off-Ball Movement' },
 ];
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -24,7 +23,6 @@ const CATEGORY_COLORS: Record<string, string> = {
   RECEPTION:    '#2563eb',
   GRAVITY:      '#d97706',
   DECISION_QUALITY: '#7c3aed',
-  OFF_BALL_MOVEMENT: '#9cc507',
 };
 
 // ── Entry card ────────────────────────────────────────────────────────────────
@@ -142,7 +140,7 @@ export default function Glossary() {
             Glossary
           </h1>
           <p className="mt-3 text-base text-[var(--text-muted)]">
-            Definitions of every metric on the platform. The variables are grouped by hypothesis: Space Control (H1), Decision Quality (H2) and Off-Ball Movement (H3). A few premises are shared by all three and are worth reading once before the individual cards below.
+            Definitions of every metric on the platform. The variables are grouped by analytical domain: Space Control (H1) and Decision Quality (H2). A few premises are shared across all areas and are worth reading once before the individual cards below.
           </p>
         </div>
       </div>
@@ -197,13 +195,13 @@ export default function Glossary() {
               style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))' }}
             >
               <EntryCard
-                label="What the '360 freeze frame' is"
-                description='For every open-play pass StatsBomb provides 360 data for, we know the (x, y) positions of the visible players at the instant the pass is released: who is behind the ball line, who is in front, where the opponents are. This is what lets us move from "total passes" to "passes in the context they were played in", and it is the shared foundation of all three hypotheses.'
+                label="Data Foundation & Method"
+                description='Built on high-density Wyscout event data and contextual match metrics. Tactical proxies reconstruct Space Control and Decision Quality profiles without requiring continuous optical tracking, providing granular tactical intelligence for player scouting across European leagues and tournaments.'
                 color={CATEGORY_COLORS['COMMON_PREMISES']}
               />
               <EntryCard
                 label="Player pool"
-                description="A player needs at least 135 minutes (about 1.5 matches) to be included: 272 players in total, one row per player. The same pool is used across H1, H2 and H3, so a profile is directly comparable from one hypothesis to the next. Below that threshold the numbers rest on too few events and become noisy."
+                description="The dataset contains 1,697 total players from Wyscout seasonal aggregated data. For advanced tactical models (Space Control and Decision Quality percentiles), a player needs at least 300 minutes played: 1,059 eligible outfield players in total, grouped into 6 macro-roles (CB, FB, MID, CAM, WIDE, FW). Goalkeepers and players below 300 minutes are excluded from percentile distributions to ensure statistical robustness."
                 color={CATEGORY_COLORS['COMMON_PREMISES']}
               />
               <EntryCard
@@ -213,7 +211,7 @@ export default function Glossary() {
               />
               <EntryCard
                 label="Open play only"
-                description="All metrics look at open play only. Set pieces (corners, free kicks, throw-ins, kick-offs and goal kicks) are left out, because they are rehearsed situations that follow their own logic and would distort a measure built to read the flow of the game. What each hypothesis then counts underneath differs by design: H1 reads the passes a player attempts, H2 reads the passing decisions he faces, and H3 reads the off-ball positions he takes up while a teammate has the ball."
+                description="All metrics look at open play only. Set pieces (corners, free kicks, throw-ins, kick-offs and goal kicks) are left out, because they are rehearsed situations that follow their own logic and would distort a measure built to read the flow of the game. What each metric then counts underneath differs by design: H1 reads the passes a player attempts and space controlled, while H2 reads the passing decisions he faces."
                 color={CATEGORY_COLORS['COMMON_PREMISES']}
               />
             </div>

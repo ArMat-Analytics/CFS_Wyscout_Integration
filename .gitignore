@@ -1,12 +1,47 @@
 # Frontend
-frontend/node_modules/
+node_modules/
+**/node_modules/
 frontend/dist/
+webapp/frontend/dist/
+.eslintcache
 
-# Backend
-backend/venv/
-backend/__pycache__/
-*.pyc
+# Backend & Python
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+*/venv/
+*/.venv/
+
+# Jupyter
+.ipynb_checkpoints/
+**/.ipynb_checkpoints/
+
+# Environment & local secrets
 .env
+.env.*
+!.env.example
+*.env
+*.local
+*.pem
+*.key
+*.cert
+*.crt
+credentials*.json
+token*.json
+service_account*.json
+
+# OS & Editor artifacts
+.DS_Store
+**/.DS_Store
+Thumbs.db
+.agents/
+skills-lock.json
 
 # LaTeX build artifacts (paper compiles to docs/paper/Paper.pdf, kept; the rest regenerate)
 docs/paper/*.aux

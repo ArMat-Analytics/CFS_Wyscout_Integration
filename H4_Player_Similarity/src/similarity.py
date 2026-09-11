@@ -5,8 +5,8 @@ The notebook is only an orchestrator: all the logic lives here.
 The idea
 --------
 Each player is represented by an 11-dimensional **DNA vector** of within-role
-percentile axes drawn from the three completed studies (see `config.DNA_AXES`):
-H1 space-control indices, H2 decision-quality axes, H3 off-ball axes. We then
+percentile axes drawn from the completed studies (see `config.DNA_AXES`):
+H1 space-control indices, H2 decision-quality axes, and off-ball movement axes. We then
 measure how similar two players are by the distance between their DNA vectors,
 **within macro-role only** — a CB is compared with CBs, a CAM with CAMs.
 
@@ -55,27 +55,15 @@ from . import config as cfg
 # DNA assembly
 # ---------------------------------------------------------------------------
 def load_dna() -> pd.DataFrame:
-    """Join the three studies into one per-player DNA table.
+    """Join H1 and H2 into one per-player DNA table.
 
-    Returns the identity columns (`player`, `team`, `macro_role`) plus the 11
+    Returns the identity columns (`player`, `team`, `macro_role`) plus the 8
     `cfg.DNA_AXES`, each expressed as a **within-role percentile (0–100)**.
-
-    Why re-percentile every axis. The H2 and H3 axes already ship as within-role
-    percentiles, but H1's indices (`idx__*`) are composite normalised scores with
-    a smaller, non-uniform spread. Mixing the two scales would let the percentile
-    axes dominate the Euclidean distance and let H1's spatial axes — Gravity
-    especially — count for far less than one eleventh. Re-ranking *every* axis to
-    a within-role percentile puts all eleven on one uniform 0–100 scale, so each
-    contributes equally to the distance by construction. The three pools are H1's
-    272-player pool, so the inner join on (player, team) keeps every player; any
-    stray NaN is filled with the within-role median before ranking.
     """
     h1 = pd.read_csv(cfg.H1_INDICES, usecols=cfg.KEY + [cfg.ROLE_COL] + cfg.H1_AXES)
     h2 = pd.read_csv(cfg.H2_DQ,      usecols=cfg.KEY + cfg.H2_AXES)
-    h3 = pd.read_csv(cfg.H3_URS,     usecols=cfg.KEY + cfg.H3_AXES)
 
-    dna = (h1.merge(h2, on=cfg.KEY, how="inner")
-             .merge(h3, on=cfg.KEY, how="inner"))
+    dna = h1.merge(h2, on=cfg.KEY, how="inner")
 
     for c in cfg.DNA_AXES:
         dna[c] = dna.groupby(cfg.ROLE_COL)[c].transform(lambda s: s.fillna(s.median()))
@@ -286,7 +274,7 @@ def axis_redundancy(dna: pd.DataFrame) -> pd.DataFrame:
     """Within-role |Spearman| correlation matrix of the 11 DNA axes.
 
     Each axis is ranked within macro-role, then correlated across the pooled
-    within-role ranks (the same recipe used in H2/H3). High off-diagonal values
+    within-role ranks (the same recipe used across the studies). High off-diagonal values
     flag axes that carry overlapping information and so double-count in the
     Euclidean distance. Returned as absolute correlations, diagonal zeroed.
     """

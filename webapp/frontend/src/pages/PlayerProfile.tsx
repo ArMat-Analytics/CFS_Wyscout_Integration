@@ -1,12 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { getFlagUrl, ALL_STATS, CAT_ACCENT, type PlayerStats, formatMarketValue, getMarketTrendArrow } from '../utils';
+import { getFlagUrl, getTeamBallEmoji, ALL_STATS, CAT_ACCENT, type PlayerStats, formatMarketValue } from '../utils';
 import { usePlayerSpaceControl } from '../hooks/useSpaceControl';
 import SpaceControlSection, { type StatViewMode } from '../components/SpaceControlSection';
 import { usePlayerDecisionQuality } from '../hooks/useDecisionQuality';
 import DecisionQualitySection from '../components/DecisionQualitySection';
-import { usePlayerOffBallMovement } from '../hooks/useOffBallMovement';
-import OffBallSection from '../components/OffBallSection';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
 
@@ -70,11 +68,9 @@ export default function PlayerProfile() {
   const [loadingStats, setLoadingStats] = useState(true);
   const [statMode, setStatMode] = useState<StatViewMode>('raw');
   const [dqMode, setDqMode] = useState<StatViewMode>('raw');
-  const [obMode, setObMode] = useState<StatViewMode>('raw');
 
   const { data: scData, loading: scLoading } = usePlayerSpaceControl(playerId);
   const { data: dqData, loading: dqLoading } = usePlayerDecisionQuality(playerId);
-  const { data: obData, loading: obLoading } = usePlayerOffBallMovement(playerId);
 
   useEffect(() => {
     if (!playerId) return;
@@ -112,7 +108,7 @@ export default function PlayerProfile() {
     );
   }
 
-  const flagUrl = getFlagUrl(stats.source_team_name);
+  const nationFlagUrl = stats.birth_country ? getFlagUrl(stats.birth_country) : undefined;
   const minutesPlayed = scData?.indices?.minutes_played ?? stats.minutes_played;
   const passesAnalysed = (scData?.aggregated as any)?.passes_analysed as number | null | undefined;
 
@@ -142,11 +138,24 @@ export default function PlayerProfile() {
                   <h1 className="font-display font-black text-4xl sm:text-5xl leading-tight tracking-tight text-[var(--text)] mb-3">
                     {stats.player_name}
                   </h1>
-                  <div className="flex flex-wrap gap-2 mb-3">
-                    <p className="flex items-center gap-2.5 text-base font-semibold text-[var(--text-muted)]">
-                      {flagUrl && <img src={flagUrl} alt="" className="w-7 h-5 object-cover rounded-[3px] shadow-sm" aria-hidden />}
-                      {stats.source_team_name}
+                  <div className="flex flex-wrap items-center gap-2 mb-3">
+                    <p className="flex items-center gap-2 text-base font-semibold text-[var(--text-muted)] mr-2">
+                      <span className="text-base" aria-hidden>{getTeamBallEmoji(stats.source_team_name)}</span>
+                      <span>{stats.source_team_name || '—'}</span>
                     </p>
+                    {stats.birth_country && (
+                      <span className="tag bg-[var(--surface)] border border-[var(--border)] text-[var(--text)] font-semibold shadow-sm flex items-center gap-1.5">
+                        {nationFlagUrl && (
+                          <img
+                            src={nationFlagUrl}
+                            alt={stats.birth_country}
+                            title={stats.birth_country}
+                            className="w-4 h-3 object-cover rounded-[2px] shadow-sm shrink-0"
+                          />
+                        )}
+                        <span>{stats.birth_country}</span>
+                      </span>
+                    )}
                     {scData?.indices?.macro_role && (
                       <span className="tag bg-[var(--surface)] border border-[var(--border)] text-[var(--text)] font-bold shadow-sm">
                         {scData.indices.macro_role}
@@ -167,24 +176,12 @@ export default function PlayerProfile() {
                         Age: {stats.age}
                       </span>
                     )}
-                    {stats.market_value_before_euros && (
-                      <span className="tag bg-[var(--surface)] border border-[var(--border)] text-[var(--text-muted)] font-semibold shadow-sm flex items-center gap-1">
-                        Pre-Euro: <strong className="text-[var(--text)]">{formatMarketValue(stats.market_value_before_euros)}</strong>
-                        {stats.market_value_after_euros ? (
-                          <>
-                            <span className="ml-1">(Post:</span>
-                            <strong className="text-[var(--text)]">{formatMarketValue(stats.market_value_after_euros)}</strong>
-                            {(() => {
-                              const arrow = getMarketTrendArrow(stats.market_value_before_euros, stats.market_value_after_euros);
-                              if (!arrow) return null;
-                              const color = arrow === '▲' ? 'var(--win)' : 'var(--lose)';
-                              return <span className="ml-0.5 font-bold" style={{ color }}>{arrow}</span>;
-                            })()}
-                            <span>)</span>
-                          </>
-                        ) : (
-                          <span className="ml-1">(Post: —)</span>
-                        )}
+                    {(stats.market_value_euros || stats.market_value_before_euros) && (
+                      <span className="tag bg-[var(--surface)] border border-[var(--border)] text-[var(--text-muted)] font-semibold shadow-sm flex items-center gap-1.5">
+                        <span>Market Value:</span>
+                        <strong className="font-mono text-[var(--accent)] font-bold">
+                          {stats.market_value_euros || formatMarketValue(stats.market_value_before_euros!)}
+                        </strong>
                       </span>
                     )}
                   </div>
@@ -266,9 +263,13 @@ export default function PlayerProfile() {
         />
       ) : (
         <div className="max-w-[1200px] mx-auto px-6 mb-12">
-          <div className="card p-6">
+          <div className="card p-6 bg-[var(--surface2)] border border-[var(--border)] rounded-xl text-center">
             <p className="font-mono text-xs text-[var(--text-dim)]">
-              No Space Control data available for this player.
+              {stats.primary_role === 'GK' || stats.primary_role === 'Goalkeeper'
+                ? '🧤 Goalkeeper — Outfield Space Control models are not applicable.'
+                : (minutesPlayed != null && minutesPlayed < 300)
+                ? `⏱️ Player played ${minutesPlayed} minutes (below the 300-minute threshold for advanced percentile models).`
+                : 'No Space Control data available for this player.'}
             </p>
           </div>
         </div>
@@ -291,38 +292,19 @@ export default function PlayerProfile() {
         />
       ) : (
         <div className="max-w-[1200px] mx-auto px-6 mb-12">
-          <div className="card p-6">
+          <div className="card p-6 bg-[var(--surface2)] border border-[var(--border)] rounded-xl text-center">
             <p className="font-mono text-xs text-[var(--text-dim)]">
-              No Decision Quality data available for this player.
+              {stats.primary_role === 'GK' || stats.primary_role === 'Goalkeeper'
+                ? '🧤 Goalkeeper — Outfield Decision Quality models are not applicable.'
+                : (minutesPlayed != null && minutesPlayed < 300)
+                ? `⏱️ Player played ${minutesPlayed} minutes (below the 300-minute threshold for advanced percentile models).`
+                : 'No Decision Quality data available for this player.'}
             </p>
           </div>
         </div>
       )}
 
 
-      {/* Off-Ball Movement Section */}
-      {obLoading ? (
-        <div className="max-w-[1200px] mx-auto px-6 mb-12">
-          <div className="card p-8 text-center">
-            <p className="font-mono text-xs text-[var(--text-dim)]">Loading Off-Ball Movement data…</p>
-          </div>
-        </div>
-      ) : obData ? (
-        <OffBallSection
-          playerName={stats.player_name}
-          row={obData}
-          mode={obMode}
-          onModeChange={setObMode}
-        />
-      ) : (
-        <div className="max-w-[1200px] mx-auto px-6 mb-12">
-          <div className="card p-6">
-            <p className="font-mono text-xs text-[var(--text-dim)]">
-              No Off-Ball Movement data available for this player.
-            </p>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

@@ -228,7 +228,7 @@ def main():
     return df_hull
 
 # =============================================================================
-# Wrapper Class for H3 Off-Ball-movement
+# Wrapper Class for Off-Ball Movement
 # =============================================================================
 class EPVPipeline:
     def __init__(self):

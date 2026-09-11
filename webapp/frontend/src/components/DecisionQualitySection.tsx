@@ -14,10 +14,10 @@ const DQ_COLOR = '#7c3aed';
 // ── Radar axes ────────────────────────────────────────────────────────────────
 
 const RADAR_AXES: { dataKey: keyof DecisionQualityRow; label: string }[] = [
-  { dataKey: 'pct__accuracy', label: 'Picks the best %' },
-  { dataKey: 'pct__worst_choice', label: 'Avoids the worst %' },
-  { dataKey: 'pct__elite_per90', label: 'Elite reads / 90' },
-  { dataKey: 'pct__poor_per90', label: 'Avoids poor / 90' },
+  { dataKey: 'pct__accuracy',     label: 'Possession Accuracy' },
+  { dataKey: 'pct__worst_choice', label: 'Duel Robustness' },
+  { dataKey: 'pct__elite_per90',  label: 'Risk Readings /90' },
+  { dataKey: 'pct__poor_per90',   label: 'Risk Accuracy' },
 ];
 
 // ── Core stat definitions per tab ─────────────────────────────────────────────
@@ -26,17 +26,16 @@ type StatDef = { col: keyof DecisionQualityRow; label: string };
 
 const CORE_STATS: Record<StatViewMode, StatDef[]> = {
   raw: [
-    { col: 'score', label: 'Score' },
-    { col: 'avg_miss_cost', label: 'Avg miss cost' },
+    { col: 'score', label: 'Score (DQI)' },
     { col: 'value_impact', label: 'Value Impact' },
   ],
   per90: [
-    { col: 'elite_per90', label: 'Elite reads / 90' },
-    { col: 'poor_per90', label: 'Poor reads / 90' },
+    { col: 'elite_per90', label: 'Risk Readings / 90' },
   ],
   percentages: [
-    { col: 'accuracy_pct', label: 'Picks the best %' },
-    { col: 'worst_choice_pct', label: 'Worst choice %' },
+    { col: 'accuracy_pct', label: 'Possession Accuracy %' },
+    { col: 'worst_choice_pct', label: 'Duel Robustness %' },
+    { col: 'poor_per90', label: 'Risk Accuracy %' },
   ],
 };
 
@@ -287,10 +286,7 @@ export default function DecisionQualitySection({
               <div className="flex flex-col gap-2">
                 {statList.map(s => {
                   const raw = row[s.col];
-                  const val = (s.col === 'value_impact' || s.col === 'avg_miss_cost') && typeof raw === 'number'
-                    ? raw * 100
-                    : raw;
-                  return <StatRow key={s.col} label={s.label} value={fmt(val)} />;
+                  return <StatRow key={s.col} label={s.label} value={fmt(raw)} />;
                 })}
               </div>
             )}
@@ -506,15 +502,14 @@ export function DQCompareRadar({
         ) : (
           <div className="flex flex-col gap-1.5">
             {statList.map(s => {
-              const scale = (s.col === 'value_impact' || s.col === 'avg_miss_cost') ? 100 : 1;
               const sv = sourceRow[s.col];
               const cv = compareRow[s.col];
               return (
                 <DualStatRow
                   key={s.col}
                   label={s.label}
-                  srcVal={typeof sv === 'number' ? sv * scale : sv}
-                  cmpVal={typeof cv === 'number' ? cv * scale : cv}
+                  srcVal={sv}
+                  cmpVal={cv}
                 />
               );
             })}

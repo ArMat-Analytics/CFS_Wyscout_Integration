@@ -1,6 +1,6 @@
 import { useEffect, useId, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getFlagUrl } from '../utils';
+import { getFlagUrl, getTeamBallEmoji } from '../utils';
 import { useDebounce } from '../hooks/useDebounce';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
@@ -41,7 +41,6 @@ const INDICES = [
   { key: 'idx__RECEPTION',     label: 'Reception',        color: '#2563eb', short: 'RECEP' },
   { key: 'idx__GRAVITY',       label: 'Gravity',          color: '#d97706', short: 'GRAV' },
   { key: 'DQ_index',           label: 'Decision Quality', color: '#7c3aed', short: 'DQ' },
-  { key: 'urs_pct_within_role',label: 'Uncapitalized Run Score', color: '#db2777', short: 'URS' },
 ] as const;
 
 const TABLE_ABBREVIATION_LABELS: Record<string, string> = {
@@ -50,7 +49,6 @@ const TABLE_ABBREVIATION_LABELS: Record<string, string> = {
   RECEP: 'Reception',
   GRAV: 'Gravity',
   DQ: 'Decision Quality',
-  URS: 'Uncapitalized Run Score',
   AVG: 'Average',
   MIN: 'Minutes played',
 };
@@ -71,7 +69,8 @@ interface Filters {
 
 interface PlayerRow {
   player: string;
-  nation: string;
+  nation?: string;
+  birth_country?: string;
   player_id?: number;
   team: string;
   primary_role: string;
@@ -82,7 +81,6 @@ interface PlayerRow {
   idx__RECEPTION: number;
   idx__GRAVITY: number;
   DQ_index: number | null;
-  urs_pct_within_role: number | null;
 }
 
 // ── Shared UI ─────────────────────────────────────────────────────────────────
@@ -212,8 +210,8 @@ function IndexBadge({ label, value, color }: { label: string; value: number | nu
 // ── Player result row ─────────────────────────────────────────────────────────
 
 function PlayerResultRow({ player, rank }: { player: PlayerRow; rank: number }) {
-  const nationName = player.nation || player.team;
-  const flagUrl    = getFlagUrl(nationName);
+  const nationName = player.birth_country || player.nation || '';
+  const flagUrl    = nationName ? getFlagUrl(nationName) : undefined;
   const macro      = player.macro_role;
   const macroColor = MACRO_COLOR[macro] ?? 'var(--text-muted)';
 
@@ -239,8 +237,8 @@ function PlayerResultRow({ player, rank }: { player: PlayerRow; rank: number }) 
 
           {/* Flag */}
           {flagUrl
-            ? <img src={flagUrl} alt={nationName} title={nationName} aria-label={nationName} className="w-7 h-5 object-cover rounded-sm shrink-0" />
-            : <span className="w-7 shrink-0 font-mono text-[9px] text-[var(--text-dim)]" title={nationName} aria-label={nationName}>{nationName.substring(0, 3).toUpperCase()}</span>
+            ? <img src={flagUrl} alt={nationName} title={nationName} aria-label={nationName} className="w-7 h-5 object-cover rounded-sm shrink-0 shadow-sm" />
+            : <span className="w-7 shrink-0 font-mono text-[9px] text-[var(--text-dim)]" title={nationName} aria-label={nationName}>{nationName ? nationName.substring(0, 3).toUpperCase() : '—'}</span>
           }
 
           {/* Name + role */}
@@ -250,16 +248,21 @@ function PlayerResultRow({ player, rank }: { player: PlayerRow; rank: number }) 
                 to={`/player/${player.player_id}`}
                 className="block no-underline hover:text-[var(--accent)] transition-colors focus-visible:outline-none focus-visible:underline"
               >
-                <p className="font-display font-black text-lg text-inherit leading-none mb-0.5">
+                <p className="font-display font-black text-lg text-inherit leading-none mb-1">
                   {player.player}
                 </p>
               </Link>
             ) : (
-              <p className="font-display font-black text-lg text-[var(--text)] leading-none mb-0.5">
+              <p className="font-display font-black text-lg text-[var(--text)] leading-none mb-1">
                 {player.player}
               </p>
             )}
-            <div className="flex items-center gap-1.5 flex-wrap">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--text)]">
+                <span className="text-xs" aria-hidden>{getTeamBallEmoji(player.team)}</span>
+                <span>{player.team}</span>
+              </span>
+              <span className="font-display text-[10px] font-bold tracking-wide uppercase text-[var(--text-dim)]">•</span>
               <span className="font-display text-[10px] font-bold tracking-wide uppercase text-[var(--text-muted)]">{player.primary_role}</span>
               <span className="tag text-[9px]" style={{ background: `${macroColor}12`, color: macroColor, border: `1px solid ${macroColor}30` }}>
                 {macro}
@@ -360,7 +363,6 @@ const DEFAULT_RANGES: Record<IndexKey, IndexRange> = {
   idx__RECEPTION:     { min: '', max: '' },
   idx__GRAVITY:       { min: '', max: '' },
   DQ_index:           { min: '', max: '' },
-  urs_pct_within_role:{ min: '', max: '' },
 };
 
 export default function SearchByAttribute() {
@@ -386,10 +388,7 @@ export default function SearchByAttribute() {
       setLoading(true);
       try {
         const data: PlayerRow[] = await fetch(`${API_BASE_URL}/space-control/search`).then(r => r.json());
-        setAllPlayers(data.map(player => ({
-          ...player,
-          nation: player.team,
-        })));
+        setAllPlayers(data);
       } catch {
         setAllPlayers([]);
       } finally {
@@ -411,13 +410,14 @@ export default function SearchByAttribute() {
     // Filter by macro role and primary role
     if (f.macroRole && player.macro_role !== f.macroRole) return false;
     if (f.role && player.primary_role !== f.role) return false;
-    if (f.nation && player.nation !== f.nation) return false;
+    const playerNation = player.birth_country || player.nation;
+    if (f.nation && playerNation !== f.nation) return false;
 
     // Numerical filters: check if player indices fall within selected ranges
     for (const idx of INDICES) {
       const raw = (player as any)[idx.key] as number | null | undefined;
-      // DQ_index and urs_pct_within_role may be null — skip when the range is at default (no filter set)
-      if ((idx.key === 'DQ_index' || idx.key === 'urs_pct_within_role') && raw == null) continue;
+      // DQ_index may be null — skip when the range is at default (no filter set)
+      if (idx.key === 'DQ_index' && raw == null) continue;
       const val = raw == null ? 0 : Math.round(Number(raw));
       const r   = f.ranges[idx.key];
       const min = r.min === '' ? 0   : Number(r.min);
@@ -470,7 +470,7 @@ export default function SearchByAttribute() {
             Search by Attribute
           </h1>
           <p className="mt-3 text-base text-[var(--text-muted)]">
-            Filter all the players by macro role, tactical role, and contextual space control index ranges.
+            Filter all players by macro role, tactical role, and contextual Space Control and Decision Quality index ranges.
             Rankings are sorted alphabetically by player name by default.
           </p>
         </div>
@@ -565,7 +565,7 @@ export default function SearchByAttribute() {
                   className="input text-[13px]"
                 >
                   <option value="">All nations</option>
-                  {Array.from(new Set(allPlayers.map(p => p.nation))).sort().map(n => <option key={n} value={n}>{n}</option>)}
+                  {Array.from(new Set(allPlayers.map(p => p.birth_country || p.nation).filter(Boolean) as string[])).sort().map(n => <option key={n} value={n}>{n}</option>)}
                 </select>
               </div>
 
@@ -617,7 +617,7 @@ export default function SearchByAttribute() {
             {sorted.length > 0 && (
               <div
                 className="hidden lg:grid items-center gap-4 py-2 px-5 mb-1.5"
-                style={{ gridTemplateColumns: '28px 48px 1fr repeat(7, 52px) 48px' }}
+                style={{ gridTemplateColumns: '28px 48px 1fr repeat(6, 52px) 48px' }}
               >
                 <span />
                 <button

@@ -1,123 +1,115 @@
-from fastapi import FastAPI, Depends, Query
-from fastapi.responses import JSONResponse
-from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy import text
-from sqlalchemy.orm import Session
-from typing import List, Optional
-import database
+"""
+FastAPI backend for Contextual Football Scouting adapted for seasonal
+aggregated data (Wyscout / wyscout_sample.csv), serving all REST endpoints
+in-memory without requiring PostgreSQL/Supabase.
+"""
+from __future__ import annotations
+
+import math
 import os
-import csv
+from typing import List, Optional
 
-SIMILARITY_CACHE = None
+import numpy as np
+import pandas as pd
+from fastapi import APIRouter, FastAPI, Query
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 
-def get_similarity_score(source_sb_name: str, neighbour_sb_name: str) -> Optional[float]:
-    global SIMILARITY_CACHE
-    if SIMILARITY_CACHE is None:
-        SIMILARITY_CACHE = {}
-        # 1. Try to load from database first
-        try:
-            db = database.SessionLocal()
-            try:
-                result = db.execute(text("SELECT source_player, neighbour_player, similarity FROM player_similarity")).fetchall()
-                for row in result:
-                    src = row[0].strip()
-                    neigh = row[1].strip()
-                    score = float(row[2])
-                    if src not in SIMILARITY_CACHE:
-                        SIMILARITY_CACHE[src] = {}
-                    SIMILARITY_CACHE[src][neigh] = score
-                print(f"Loaded {len(SIMILARITY_CACHE)} players' similarity from database.")
-            finally:
-                db.close()
-        except Exception as db_err:
-            print(f"Failed to load similarity from database: {db_err}. Falling back to CSV...")
-            SIMILARITY_CACHE = {}
+import data_module as dm
 
-        # 2. Fallback to CSV if database was empty or failed
-        if not SIMILARITY_CACHE:
-            backend_dir = os.path.dirname(os.path.abspath(__file__))
-            csv_path = os.path.abspath(os.path.join(backend_dir, "..", "..", "H4_Player_Similarity", "data", "player_similarity.csv"))
-            if os.path.exists(csv_path):
-                try:
-                    with open(csv_path, mode="r", encoding="utf-8") as f:
-                        reader = csv.DictReader(f)
-                        for row in reader:
-                            src = row["source_player"].strip()
-                            neigh = row["neighbour_player"].strip()
-                            score = float(row["similarity"])
-                            if src not in SIMILARITY_CACHE:
-                                SIMILARITY_CACHE[src] = {}
-                            SIMILARITY_CACHE[src][neigh] = score
-                except Exception as e:
-                    print(f"Error loading similarity CSV: {e}")
-            else:
-                print(f"Similarity CSV not found at {csv_path}")
-
-    if not source_sb_name or not neighbour_sb_name:
-        return None
-
-    if source_sb_name in SIMILARITY_CACHE and neighbour_sb_name in SIMILARITY_CACHE[source_sb_name]:
-        return SIMILARITY_CACHE[source_sb_name][neighbour_sb_name]
-    if neighbour_sb_name in SIMILARITY_CACHE and source_sb_name in SIMILARITY_CACHE[neighbour_sb_name]:
-        return SIMILARITY_CACHE[neighbour_sb_name][source_sb_name]
-
-    return None
-
-
-app = FastAPI(title="Football Scouting API")
+app = FastAPI(title="Contextual Football Scouting API (Wyscout wyscout_sample.csv)")
 
 FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
 
-# CORS — allow both localhost and 127.0.0.1 variants so the browser never blocks
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:5173",
-        "http://localhost:5174",
-        "http://127.0.0.1:5173",
-        "http://127.0.0.1:5174",
+        "http://localhost:5173", "http://localhost:5174",
+        "http://127.0.0.1:5173", "http://127.0.0.1:5174",
         FRONTEND_URL,
     ],
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+POOL = dm.DATA["pool"]
+ALL_PLAYERS = dm.DATA["all_players"]
+SIMILARITY = dm.DATA["similarity"]
+SIMILARITY_DICT = dm.DATA.get("similarity_dict", {})
 
-def market_value_numeric_sql(column_name: str) -> str:
-    return (
-        f"CASE "
-        f"WHEN {column_name} IS NULL OR {column_name} = '' THEN NULL "
-        f"WHEN {column_name} ILIKE '%,%' THEN REGEXP_REPLACE(REPLACE(REPLACE({column_name}, '.', ''), ',', '.'), '[^0-9.]', '', 'g') "
-        f"ELSE REGEXP_REPLACE({column_name}, '[^0-9.]', '', 'g') "
-        f"END"
+
+def clean(v):
+    """NaN/inf -> None, numpy scalars -> native Python types for JSON serialization."""
+    if v is None:
+        return None
+    if isinstance(v, (float, np.floating)):
+        if math.isnan(v) or math.isinf(v):
+            return None
+        return float(v)
+    if isinstance(v, (int, np.integer)):
+        return int(v)
+    if hasattr(v, "item"):
+        val = v.item()
+        if isinstance(val, float) and (math.isnan(val) or math.isinf(val)):
+            return None
+        return val
+    return v
+
+
+def row_to_dict(row: pd.Series) -> dict:
+    return {k: clean(v) for k, v in row.to_dict().items()}
+
+
+def find_by_player_id(player_id: int) -> Optional[pd.Series]:
+    match = POOL[POOL["player_id"] == player_id]
+    if not match.empty:
+        return match.iloc[0]
+    match_all = ALL_PLAYERS[ALL_PLAYERS["player_id"] == player_id]
+    if not match_all.empty:
+        return match_all.iloc[0]
+    return None
+
+
+router = APIRouter()
+
+# ── health ───────────────────────────────────────────────────────────────────
+@router.get("/")
+def root():
+    return {
+        "status": "🟢 SUCCESS",
+        "message": f"{len(POOL)} eligible players loaded from wyscout_sample.csv (in-memory, no DB)",
+        "total_players": len(ALL_PLAYERS),
+    }
+
+
+# ── /teams/ ──────────────────────────────────────────────────────────────────
+@router.get("/teams")
+@router.get("/teams/")
+def get_teams():
+    teams = (
+        POOL[["source_team_name"]]
+        .drop_duplicates()
+        .sort_values("source_team_name")
+        .reset_index(drop=True)
     )
+    return [
+        {"team_id": i + 1, "team_name": row["source_team_name"], "logo_url": None}
+        for i, row in teams.iterrows()
+    ]
 
-@app.get("/")
-def test_connection():
-    try:
-        with database.engine.connect() as conn:
-            conn.execute(text("SELECT 1"))
-        return {"status": "🟢 SUCCESS", "message": "Connection successful!"}
-    except Exception as e:
-        return {"status": "🔴 ERROR", "message": str(e)}
 
-@app.get("/teams/")
-def get_teams(db: Session = Depends(database.get_db)):
-    # Fetch all teams ordered alphabetically by name
-    result = db.execute(text("SELECT * FROM teams ORDER BY team_name ASC"))
-    teams = [dict(row._mapping) for row in result]
-    return teams
+# ── /roles/ ──────────────────────────────────────────────────────────────────
+@router.get("/roles")
+@router.get("/roles/")
+def get_roles():
+    return sorted(POOL["primary_role"].dropna().unique().tolist())
 
-# NEW ENDPOINT: Fetch dynamic roles directly from the database
-@app.get("/roles/")
-def get_roles(db: Session = Depends(database.get_db)):
-    query_str = "SELECT DISTINCT primary_role FROM player_totals WHERE primary_role IS NOT NULL ORDER BY primary_role"
-    result = db.execute(text(query_str))
-    # Return a flat list of role strings
-    return [row[0] for row in result]
 
-@app.get("/players/")
+# ── /players/ ────────────────────────────────────────────────────────────────
+@router.get("/players")
+@router.get("/players/")
 def get_players(
     search: str = "",
     sort_by: str = "player_name",
@@ -134,444 +126,295 @@ def get_players(
     val_post_max: Optional[float] = None,
     val_diff_min: Optional[float] = None,
     val_diff_max: Optional[float] = None,
-    db: Session = Depends(database.get_db)
 ):
-    # Using a CTE (Common Table Expression) to pre-calculate market values as numbers
-    pre_value_sql = market_value_numeric_sql("p.market_value_before_euros")
-    post_value_sql = market_value_numeric_sql("p.market_value_after_euros")    
-    query_str = f"""
-        WITH CorrectedSC AS (
-            SELECT 
-                sc.*,
-                CASE 
-                    WHEN sc.player = 'Daniel Olmo Carvajal' THEN (SELECT player_id FROM player_profiles WHERE player_name ILIKE '%Olmo%' LIMIT 1)
-                    ELSE sc.db_player_id
-                END as fixed_db_player_id
-            FROM sc_indices sc
-        ),
-        PlayerData AS (
-            SELECT DISTINCT ON (p.player_id)
-                p.player_id, p.player_name, p.age, p.source_team_name, 
-                p.preferred_foot, p.market_value_before_euros, p.market_value_after_euros, 
-                pt.primary_role, sc.macro_role,
-                (CASE 
-                    WHEN p.market_value_before_euros ILIKE '%m%' THEN CAST(NULLIF({pre_value_sql}, '') AS NUMERIC) * 1000000
-                    WHEN p.market_value_before_euros ILIKE '%k%' THEN CAST(NULLIF({pre_value_sql}, '') AS NUMERIC) * 1000
-                    ELSE NULL END) as val_pre_num,
-                (CASE 
-                    WHEN p.market_value_after_euros ILIKE '%m%' THEN CAST(NULLIF({post_value_sql}, '') AS NUMERIC) * 1000000
-                    WHEN p.market_value_after_euros ILIKE '%k%' THEN CAST(NULLIF({post_value_sql}, '') AS NUMERIC) * 1000
-                    ELSE NULL END) as val_post_num
-            FROM player_profiles p
-            INNER JOIN player_totals pt ON p.truth_player_id = pt.player_id
-            INNER JOIN CorrectedSC sc   ON sc.fixed_db_player_id = p.player_id
-            ORDER BY p.player_id, p.player_name
-        )
-        SELECT * FROM PlayerData WHERE 1=1
-    """
-    params = {}
+    df = POOL
 
     if search:
-        query_str += " AND unaccent(player_name) ILIKE unaccent(:search)"
-        params["search"] = f"%{search}%"
-
+        df = df[df["player_name"].str.contains(search, case=False, na=False)]
     if teams:
-        query_str += " AND source_team_name = ANY(:teams)"
-        params["teams"] = teams
-        
-    if age_min is not None:
-        query_str += " AND age >= :age_min"
-        params["age_min"] = age_min
-    if age_max is not None:
-        query_str += " AND age <= :age_max"
-        params["age_max"] = age_max
-        
+        df = df[df["source_team_name"].isin(teams)]
+    if age_min is not None and "Age" in df.columns:
+        df = df[df["Age"] >= age_min]
+    if age_max is not None and "Age" in df.columns:
+        df = df[df["Age"] <= age_max]
     if macro_role:
-        query_str += " AND macro_role = :macro_role"
-        params["macro_role"] = macro_role
+        df = df[df["macro_role"] == macro_role]
     if role:
-        query_str += " AND primary_role = :role"
-        params["role"] = role
-        
+        df = df[df["primary_role"] == role]
     if foot:
-        query_str += " AND preferred_foot ILIKE :foot"
-        params["foot"] = f"{foot}%"
-
+        df = df[df["preferred_foot"] == foot.lower()]
     if val_pre_min is not None:
-        query_str += " AND val_pre_num >= :vpre_min"
-        params["vpre_min"] = val_pre_min * 1000000 # Assume input in millions
+        df = df[df["val_pre_num"] >= val_pre_min]
     if val_pre_max is not None:
-        query_str += " AND val_pre_num <= :vpre_max"
-        params["vpre_max"] = val_pre_max * 1000000
-        
+        df = df[df["val_pre_num"] <= val_pre_max]
     if val_post_min is not None:
-        query_str += " AND val_post_num >= :vpost_min"
-        params["vpost_min"] = val_post_min * 1000000
+        df = df[df["val_post_num"] >= val_post_min]
     if val_post_max is not None:
-        query_str += " AND val_post_num <= :vpost_max"
-        params["vpost_max"] = val_post_max * 1000000
-        
-    if val_diff_min is not None:
-        query_str += " AND (val_post_num - val_pre_num) >= :vdiff_min"
-        params["vdiff_min"] = val_diff_min * 1000000
-    if val_diff_max is not None:
-        query_str += " AND (val_post_num - val_pre_num) <= :vdiff_max"
-        params["vdiff_max"] = val_diff_max * 1000000
+        df = df[df["val_post_num"] <= val_post_max]
+    if val_diff_min is not None and val_diff_min > 0:
+        df = df.iloc[0:0]
+    if val_diff_max is not None and val_diff_max < 0:
+        df = df.iloc[0:0]
 
-    # Sorting logic
-    valid_sort = ["player_name", "primary_role", "age", "source_team_name", "preferred_foot", "market_value_before_euros", "market_value_after_euros"]
-    if sort_by in valid_sort:
-        order = "DESC" if sort_order == "desc" else "ASC"
-        if sort_by == "market_value_before_euros":
-            query_str += f" ORDER BY val_pre_num {order} NULLS LAST"
-        elif sort_by == "market_value_after_euros":
-            query_str += f" ORDER BY val_post_num {order} NULLS LAST"
-        else:
-            query_str += f" ORDER BY {sort_by} {order} NULLS LAST"
-    else:
-        query_str += " ORDER BY player_name ASC"
+    sort_map = {
+        "player_name": "player_name", "primary_role": "primary_role", "age": "Age",
+        "source_team_name": "source_team_name", "preferred_foot": "preferred_foot",
+        "market_value_euros": "market_value_num",
+        "market_value_before_euros": "val_pre_num", "market_value_after_euros": "val_post_num",
+    }
+    sort_col = sort_map.get(sort_by, "player_name")
+    df = df.sort_values(sort_col, ascending=(sort_order != "desc"), na_position="last")
 
-    result = db.execute(text(query_str), params)
-    return [dict(row._mapping) for row in result]
+    cols = ["player_id", "player_name", "primary_role", "market_value_euros",
+            "market_value_before_euros", "market_value_after_euros", "val_pre_num", "val_post_num", "Age",
+            "source_team_name", "preferred_foot", "birth_country"]
+    cols = [c for c in cols if c in df.columns]
+    out = df[cols].rename(columns={"Age": "age"})
+    return [row_to_dict(r) for _, r in out.iterrows()]
 
-# ENDPOINT: Fetch specific player statistics for the Comparator
-@app.get("/players/{player_id}/stats")
-def get_player_stats(player_id: int, db: Session = Depends(database.get_db)):
-    query_str = """
-        SELECT p.player_name, p.source_team_name, p.age, p.preferred_foot, 
-               p.market_value_before_euros, p.market_value_after_euros, 
-               pt.* FROM player_profiles p
-        JOIN player_totals pt ON p.truth_player_id = pt.player_id
-        WHERE p.player_id = :pid
-    """
-    result = db.execute(text(query_str), {"pid": player_id}).fetchone()
-    if not result:
-        return {"error": "Stats not found"}
-    return dict(result._mapping)
 
-@app.get("/players/{player_id}/decision-quality")
-def get_player_decision_quality(player_id: int, db: Session = Depends(database.get_db)):
-    """Return the decision-quality row for a single player, looked up by db_player_id."""
-    row = db.execute(text("""
-        WITH CorrectedSC AS (
-            SELECT 
-                sc.*,
-                CASE 
-                    WHEN sc.player = 'Daniel Olmo Carvajal' THEN (SELECT player_id FROM player_profiles WHERE player_name ILIKE '%Olmo%' LIMIT 1)
-                    ELSE sc.db_player_id
-                END as fixed_db_player_id
-            FROM sc_indices sc
-        )
-        SELECT dq.*
-        FROM player_decision_quality dq
-        JOIN CorrectedSC sc ON sc.player = dq.player AND sc.team = dq.team
-        WHERE sc.fixed_db_player_id = :pid
-        LIMIT 1
-    """), {"pid": player_id}).fetchone()
+# ── /players/{id}/stats ──────────────────────────────────────────────────────
+@router.get("/players/{player_id}/stats")
+def get_player_stats(player_id: int):
+    row = find_by_player_id(player_id)
+    if row is None:
+        return JSONResponse(status_code=404, content={"error": "Stats not found"})
 
-    if not row:
+    minutes = row["minutes_played"] or 1
+    factor = minutes / 90.0
+
+    return row_to_dict(pd.Series({
+        "player_id": int(row["player_id"]),
+        "player_name": row["player_name"],
+        "source_team_name": row["source_team_name"],
+        "birth_country": row.get("birth_country", "Unknown"),
+        "age": row.get("Age"),
+        "preferred_foot": row.get("preferred_foot"),
+        "market_value_euros": row.get("market_value_euros") or row.get("market_value_before_euros"),
+        "market_value_before_euros": row.get("market_value_before_euros"),
+        "market_value_after_euros": row.get("market_value_after_euros"),
+        "minutes_played": row.get("minutes_played"),
+        "primary_role": row.get("primary_role"),
+        "goals": row.get("Goals"),
+        "xg_total": row.get("Expected goals"),
+        "assists": row.get("Assists"),
+        "key_passes": round((row.get("Key passes/90") or 0) * factor),
+        "dribbles_successful": round((row.get("Dribbles/90") or 0) * factor * (row.get("Successful dribbles, %") or 0) / 100.0),
+        "pass_completion_pct": row.get("Accurate passes, %"),
+        "total_touches": round((row.get("Passes/90") or 0) * factor),
+        "ball_recoveries": round((row.get("Successful defensive actions/90") or 0) * factor),
+        "interceptions": round((row.get("Interceptions/90") or 0) * factor),
+    }))
+
+
+# ── /players/{id}/decision-quality ──────────────────────────────────────────
+DQ_COLS = [
+    "player_name", "source_team_name", "primary_role", "macro_role", "minutes_played",
+    "n_decisions", "DQ_index", "value_impact",
+    "pct__accuracy", "pct__worst_choice", "pct__elite_per90", "pct__poor_per90",
+    "score", "avg_miss_cost", "elite_per90", "poor_per90", "accuracy_pct", "worst_choice_pct",
+    "birth_country",
+]
+DQ_RENAME = {"player_name": "player", "source_team_name": "team"}
+
+
+@router.get("/players/{player_id}/decision-quality")
+def get_player_decision_quality(player_id: int):
+    row = find_by_player_id(player_id)
+    if row is None or "DQ_index" not in row:
         return JSONResponse(status_code=404, content={"error": "Decision Quality data not found"})
-    return dict(row._mapping)
+    available_cols = [c for c in DQ_COLS if c in row.index]
+    return row_to_dict(row[available_cols].rename(DQ_RENAME))
 
-@app.get("/players/{player_id}/off-ball")
-def get_player_off_ball(player_id: int, db: Session = Depends(database.get_db)):
-    """Return the off-ball movement row for a single player, looked up by db_player_id."""
-    row = db.execute(text("""
-        WITH CorrectedSC AS (
-            SELECT 
-                sc.*,
-                CASE 
-                    WHEN sc.player = 'Daniel Olmo Carvajal' THEN (SELECT player_id FROM player_profiles WHERE player_name ILIKE '%Olmo%' LIMIT 1)
-                    ELSE sc.db_player_id
-                END as fixed_db_player_id
-            FROM sc_indices sc
-        )
-        SELECT ob.*
-        FROM player_off_ball ob
-        JOIN CorrectedSC sc ON sc.player = ob.player AND sc.team = ob.team
-        WHERE sc.fixed_db_player_id = :pid
-        LIMIT 1
-    """), {"pid": player_id}).fetchone()
 
-    if not row:
-        return JSONResponse(status_code=404, content={"error": "Off-Ball Movement data not found"})
-    return dict(row._mapping)
+# ── /players/{id}/off-ball (Deprecated / H3 Omitted) ─────────────────────────
+@router.get("/players/{player_id}/off-ball")
+def get_player_off_ball(player_id: int):
+    return JSONResponse(status_code=404, content={"error": "Off-Ball Movement is not available (H3 omitted)"})
 
-@app.get("/players/{player_id}/space-control")
-def get_player_space_control(player_id: int, db: Session = Depends(database.get_db)):
-    idx_row = db.execute(text(
-        """
-        WITH CorrectedSC AS (
-            SELECT 
-                sc.*,
-                CASE 
-                    WHEN sc.player = 'Daniel Olmo Carvajal' THEN (SELECT player_id FROM player_profiles WHERE player_name ILIKE '%Olmo%' LIMIT 1)
-                    ELSE sc.db_player_id
-                END as fixed_db_player_id
-            FROM sc_indices sc
-        )
-        SELECT sc.*, COALESCE(p.player_name, sc.player) as tm_player_name,
-               p.age, p.preferred_foot, p.market_value_before_euros, p.market_value_after_euros
-        FROM CorrectedSC sc
-        LEFT JOIN player_profiles p ON sc.fixed_db_player_id = p.player_id
-        WHERE sc.fixed_db_player_id = :pid LIMIT 1
-        """
-    ), {"pid": player_id}).fetchone()
 
-    agg_row = None
-    if idx_row:
-        # sc_aggregated uses StatsBomb player names + team, so we need to query using those values
-        agg_row = db.execute(text(
-            "SELECT * FROM sc_aggregated WHERE player = :player AND team = :team LIMIT 1"
-        ), {"player": idx_row.player, "team": idx_row.team}).fetchone()
+# ── /players/{id}/space-control ─────────────────────────────────────────────
+SC_IDX_COLS = [
+    "player_name", "source_team_name", "primary_role", "macro_role", "minutes_played",
+    "coverage_pct", "player_id", "birth_country", "market_value_euros",
+    "idx__PROGRESSION", "idx__DANGEROUSNESS", "idx__RECEPTION", "idx__GRAVITY", "idx__DEF",
+    "pct__lb_geom_per90", "pct__lb_quality_per90", "pct__lb_epv_per90",
+    "pct__successful_hull_penetrations_per90", "pct__defenders_bypassed_mean",
+    "pct__epv_added_per90", "pct__epv_penetration_per90", "pct__epv_inside_circ_per90",
+    "pct__epv_exit_per90", "pct__epv_outside_circ_per90", "pct__headers_per90",
+    "pct__between_lines_pct", "pct__successful_hull_exits_per90", "pct__pressure_resistance_pct",
+    "pct__gravity_proximity_pct", "pct__gravity_hull_pct", "pct__gravity_abs_m",
+    "pct__interceptions_per90", "pct__duels_per90", "pct__defensive_duels_per90",
+    "Age", "preferred_foot", "market_value_before_euros", "market_value_after_euros",
+]
+SC_IDX_RENAME = {"player_name": "player", "source_team_name": "team", "Age": "age"}
 
-        # Use Transfermarkt name for frontend compatibility
-        idx_dict = dict(idx_row._mapping)
-        idx_dict["player"] = idx_dict.pop("tm_player_name")
-        idx_row_final = idx_dict
-    else:
-        idx_row_final = None
+SC_AGG_COLS = [
+    "player_name", "source_team_name", "primary_role", "macro_role", "minutes_played",
+    "coverage_pct",
+    "idx__PROGRESSION", "idx__DANGEROUSNESS", "idx__RECEPTION", "idx__GRAVITY", "idx__DEF",
+    "pct__lb_geom_per90", "pct__lb_quality_per90", "pct__lb_epv_per90",
+    "pct__epv_penetration_per90", "pct__epv_inside_circ_per90",
+    # Core stats
+    "lb_geom", "lb_quality", "lb_epv", "defenders_bypassed_mean",
+    "penetration_n", "successful_hull_penetrations_n",
+    "lb_geom_per90", "lb_quality_per90", "lb_epv_per90",
+    "penetration_per90", "successful_hull_penetrations_per90",
+    "lb_geom_pct", "lb_quality_pct", "lb_epv_pct", "penetration_completion_pct",
+    "epv_penetration_sum", "epv_inside_circ_sum", "epv_exit_sum", "epv_outside_circ_sum",
+    "epv_added_per90", "epv_penetration_per90", "epv_inside_circ_per90",
+    "epv_exit_per90", "epv_outside_circ_per90",
+    "between_lines_n", "pressure_resistance_n", "inside_circ_n",
+    "between_lines_per90", "successful_hull_exits_per90", "inside_circ_per90",
+    "between_lines_pct", "hull_exit_pct", "pressure_resistance_pct",
+    "gravity_directional_m", "gravity_proximity_pct", "gravity_hull_pct",
+    "interceptions_n", "interceptions_per90", "duels_n", "duels_per90",
+    "defensive_duels_n", "defensive_duels_per90",
+    "passes_analysed",
+]
+SC_AGG_RENAME = {"player_name": "player", "source_team_name": "team"}
 
+
+@router.get("/players/{player_id}/space-control")
+def get_player_space_control(player_id: int):
+    row = find_by_player_id(player_id)
+    if row is None or "idx__PROGRESSION" not in row:
+        return {"indices": None, "aggregated": None}
     return {
-        "indices":    idx_row_final,
-        "aggregated": dict(agg_row._mapping) if agg_row else None,
+        "indices": row_to_dict(row[SC_IDX_COLS].rename(SC_IDX_RENAME)),
+        "aggregated": row_to_dict(row[SC_AGG_COLS].rename(SC_AGG_RENAME)),
     }
 
 
-@app.get("/decision-quality/similar")
-def get_similar_dq(
-    macro_role: str,
-    exclude_player: Optional[str] = None,
-    db: Session = Depends(database.get_db),
-):
-    """Return all DQ rows for a given macro_role, excluding one player by name."""
+# ── /decision-quality/similar ───────────────────────────────────────────────
+@router.get("/decision-quality/similar")
+def get_similar_dq(macro_role: str, exclude_player: Optional[str] = None):
     try:
-        q = """
-            WITH CorrectedSC AS (
-                SELECT 
-                    sc.*,
-                    CASE 
-                        WHEN sc.player = 'Daniel Olmo Carvajal' THEN (SELECT player_id FROM player_profiles WHERE player_name ILIKE '%Olmo%' LIMIT 1)
-                        ELSE sc.db_player_id
-                    END as fixed_db_player_id
-                FROM sc_indices sc
-            )
-            SELECT dq.*, COALESCE(p.player_name, sc.player) as player
-            FROM player_decision_quality dq
-            JOIN CorrectedSC sc ON sc.player = dq.player AND sc.team = dq.team
-            LEFT JOIN player_profiles p ON sc.fixed_db_player_id = p.player_id
-            WHERE dq.macro_role = :macro_role
-        """
-        params: dict = {"macro_role": macro_role}
-
+        df = POOL[POOL["macro_role"] == macro_role]
         if exclude_player:
-            q += """
-              AND COALESCE(p.player_name, sc.player) != :excl
-            """
-            params["excl"] = exclude_player
-
-        q += " ORDER BY COALESCE(p.player_name, sc.player) ASC"
-
-        rows = [dict(r._mapping) for r in db.execute(text(q), params)]
-        return rows
+            df = df[df["player_name"] != exclude_player]
+        df = df.sort_values("player_name")
+        return [row_to_dict(r[DQ_COLS].rename(DQ_RENAME)) for _, r in df.iterrows()]
     except Exception as e:
-        return JSONResponse(
-            status_code=500,
-            content={"error": str(e), "hint": "Run import_decision_quality.py to create player_decision_quality table"},
-        )
+        return JSONResponse(status_code=500, content={"error": str(e)})
 
 
-@app.get("/space-control/similar")
-def get_similar_players(
-    macro_role: str,
-    exclude_player: Optional[str] = None,
-    db: Session = Depends(database.get_db)
-):
+# ── /space-control/similar ──────────────────────────────────────────────────
+FB_SIDE = {"LB": "L", "LWB": "L", "RB": "R", "RWB": "R"}
+
+
+@router.get("/space-control/similar")
+def get_similar_players(macro_role: str, exclude_player: Optional[str] = None, player_id: Optional[int] = None):
     try:
-        # Get the StatsBomb name for the exclude_player (which is a Transfermarkt name)
-        source_sb_name = None
-        if exclude_player:
-            sb_row = db.execute(text("""
-                SELECT DISTINCT sc.player 
-                FROM sc_indices sc
-                LEFT JOIN player_profiles p ON (
-                    CASE 
-                        WHEN sc.player = 'Daniel Olmo Carvajal' THEN (SELECT player_id FROM player_profiles WHERE player_name ILIKE '%Olmo%' LIMIT 1)
-                        ELSE sc.db_player_id
-                    END
-                ) = p.player_id
-                WHERE p.player_name = :excl OR sc.player = :excl
-                LIMIT 1
-            """), {"excl": exclude_player}).fetchone()
-            if sb_row:
-                source_sb_name = sb_row[0]
+        df = POOL[POOL["macro_role"] == macro_role].copy()
 
-        q = """
-            WITH CorrectedSC AS (
-                SELECT 
-                    sc.*,
-                    CASE 
-                        WHEN sc.player = 'Daniel Olmo Carvajal' THEN (SELECT player_id FROM player_profiles WHERE player_name ILIKE '%Olmo%' LIMIT 1)
-                        ELSE sc.db_player_id
-                    END as fixed_db_player_id
-                FROM sc_indices sc
-            )
-            SELECT sc.*, COALESCE(p.player_name, sc.player) as player, sc.player as sb_player_name, p.player_id,
-                   p.age, p.preferred_foot, p.market_value_before_euros, p.market_value_after_euros
-            FROM CorrectedSC sc
-            LEFT JOIN player_profiles p ON sc.fixed_db_player_id = p.player_id
-            WHERE sc.macro_role = :macro_role
-        """
-        params: dict = {"macro_role": macro_role}
-        
-        # Exclude the original player from results if specified (using Transfermarkt name for comparison)
-        if exclude_player:
-            q += " AND COALESCE(p.player_name, sc.player) != :exclude_player"
-            params["exclude_player"] = exclude_player
-            
-        q += " ORDER BY COALESCE(p.player_name, sc.player) ASC"
-        
-        rows = [dict(r._mapping) for r in db.execute(text(q), params)]
+        ref_row = None
+        if player_id:
+            ref_match = POOL[POOL["player_id"] == player_id]
+            if not ref_match.empty:
+                ref_row = ref_match.iloc[0]
+            df = df[df["player_id"] != player_id]
+        elif exclude_player:
+            ref_match = POOL[POOL["player_name"] == exclude_player]
+            if not ref_match.empty:
+                ref_row = ref_match.iloc[0]
+            df = df[df["player_name"] != exclude_player]
+
+        # Full Back (FB): same side and same preferred foot
+        if macro_role == "FB" and ref_row is not None:
+            ref_side = FB_SIDE.get(ref_row.get("primary_position"))
+            if ref_side:
+                df = df[df["primary_position"].map(FB_SIDE) == ref_side]
+            ref_foot = ref_row.get("preferred_foot")
+            if ref_foot and ref_foot in ("right", "left"):
+                df = df[df["preferred_foot"] == ref_foot]
+
+        df = df.sort_values("player_name")
+        rows = [row_to_dict(r[SC_IDX_COLS].rename(SC_IDX_RENAME)) for _, r in df.iterrows()]
+
+        lookup_key = str(player_id) if player_id else exclude_player
+        sim_lookup = SIMILARITY_DICT.get(lookup_key, {}) if lookup_key else {}
+        if not sim_lookup and exclude_player:
+            sim_lookup = SIMILARITY_DICT.get(exclude_player, {})
+
         for r in rows:
-            r["similarity_score"] = get_similarity_score(source_sb_name, r["sb_player_name"])
-            
-        # Sort by similarity score descending, placing None at the end
+            s_score = sim_lookup.get(str(r.get("player_id")))
+            if s_score is None:
+                s_score = sim_lookup.get(r["player"])
+            r["similarity_score"] = clean(s_score)
+
         rows.sort(key=lambda x: x["similarity_score"] if x["similarity_score"] is not None else -1.0, reverse=True)
         return rows
     except Exception as e:
-        return JSONResponse(
-            status_code=500,
-            content={"error": str(e), "hint": "Run import_space_control.py to create sc_indices table"}
-        )
-    
+        return JSONResponse(status_code=500, content={"error": str(e)})
 
-@app.get("/space-control/aggregated")
-def get_sc_aggregated(player: str, team: str, db: Session = Depends(database.get_db)):
-    """Return sc_aggregated row for a single player by StatsBomb name OR Transfermarkt name."""
-    # 1. Try to find the player using the StatsBomb name (which is what's in sc_aggregated)
-    row = db.execute(text(
-        "SELECT * FROM sc_aggregated WHERE player = :player AND team = :team LIMIT 1"
-    ), {"player": player, "team": team}).fetchone()
-    
-    if not row:
-        # If not found, it might be because the player is listed under a different name in sc_indices (e.g. Daniel Olmo Carvajal vs Daniel Olmo).
-        q = """
-            WITH CorrectedSC AS (
-                SELECT sc.player as sb_player_name, sc.team, p.player_name
-                FROM sc_indices sc
-                LEFT JOIN player_profiles p ON (
-                    CASE 
-                        WHEN sc.player = 'Daniel Olmo Carvajal' THEN (SELECT player_id FROM player_profiles WHERE player_name ILIKE '%Olmo%' LIMIT 1)
-                        ELSE sc.db_player_id
-                    END
-                ) = p.player_id
-            )
-            SELECT agg.* FROM sc_aggregated agg
-            JOIN CorrectedSC c ON agg.player = c.sb_player_name AND agg.team = c.team
-            WHERE c.player_name = :player AND agg.team = :team
-            LIMIT 1
-        """
-        row = db.execute(text(q), {"player": player, "team": team}).fetchone()
-        
-    if not row:
+
+# ── /space-control/aggregated ───────────────────────────────────────────────
+@router.get("/space-control/aggregated")
+def get_sc_aggregated(player: str, team: str):
+    match = POOL[(POOL["player_name"] == player) & (POOL["source_team_name"] == team)]
+    if match.empty:
         return None
-    return dict(row._mapping)
+    return row_to_dict(match.iloc[0][SC_AGG_COLS].rename(SC_AGG_RENAME))
 
 
-@app.get("/space-control/search")
+# ── /space-control/search ───────────────────────────────────────────────────
+@router.get("/space-control/search")
 def search_space_control(
     macro_role: Optional[str] = None,
     role: Optional[str] = None,
-    prog_min: Optional[float] = Query(None),
-    prog_max: Optional[float] = Query(None),
-    danger_min: Optional[float] = Query(None),
-    danger_max: Optional[float] = Query(None),
-    recep_min: Optional[float] = Query(None),
-    recep_max: Optional[float] = Query(None),
-    grav_min: Optional[float] = Query(None),
-    grav_max: Optional[float] = Query(None),
-    db: Session = Depends(database.get_db)
+    prog_min: Optional[float] = Query(None), prog_max: Optional[float] = Query(None),
+    danger_min: Optional[float] = Query(None), danger_max: Optional[float] = Query(None),
+    recep_min: Optional[float] = Query(None), recep_max: Optional[float] = Query(None),
+    grav_min: Optional[float] = Query(None), grav_max: Optional[float] = Query(None),
 ):
-    """
-    Filter sc_indices by macro_role, primary_role, and index ranges.
-    Returns players ordered by average index score descending.
-    """
-    q = """
-        WITH CorrectedSC AS (
-            SELECT 
-                sc.*,
-                CASE 
-                    WHEN sc.player = 'Daniel Olmo Carvajal' THEN (SELECT player_id FROM player_profiles WHERE player_name ILIKE '%Olmo%' LIMIT 1)
-                    ELSE sc.db_player_id
-                END as fixed_db_player_id
-            FROM sc_indices sc
-        )
-        SELECT sc.*, COALESCE(p.player_name, sc.player) as player, p.player_id, dq."DQ_index", ob.urs_pct_within_role
-        FROM CorrectedSC sc
-        LEFT JOIN player_profiles p ON sc.fixed_db_player_id = p.player_id
-        LEFT JOIN player_decision_quality dq
-            ON sc.player = dq.player AND sc.team = dq.team
-        LEFT JOIN player_off_ball ob
-            ON sc.player = ob.player AND sc.team = ob.team
-        WHERE 1=1
-    """
-    params: dict = {}
-    
+    df = POOL
     if macro_role:
-        q += " AND sc.macro_role = :macro_role"
-        params["macro_role"] = macro_role
+        df = df[df["macro_role"] == macro_role]
     if role:
-        q += " AND sc.primary_role = :role"
-        params["role"] = role
-        
-    # Using CAST to NUMERIC for safe comparison, and allowing nulls to be ignored in filtering
+        df = df[df["primary_role"] == role]
     if prog_min is not None:
-        q += ' AND CAST(sc."idx__PROGRESSION" AS NUMERIC) >= :prog_min'
-        params["prog_min"] = prog_min
+        df = df[df["idx__PROGRESSION"] >= prog_min]
     if prog_max is not None:
-        q += ' AND CAST(sc."idx__PROGRESSION" AS NUMERIC) <= :prog_max'
-        params["prog_max"] = prog_max
-        
+        df = df[df["idx__PROGRESSION"] <= prog_max]
     if danger_min is not None:
-        q += ' AND CAST(sc."idx__DANGEROUSNESS" AS NUMERIC) >= :danger_min'
-        params["danger_min"] = danger_min
+        df = df[df["idx__DANGEROUSNESS"] >= danger_min]
     if danger_max is not None:
-        q += ' AND CAST(sc."idx__DANGEROUSNESS" AS NUMERIC) <= :danger_max'
-        params["danger_max"] = danger_max
-        
+        df = df[df["idx__DANGEROUSNESS"] <= danger_max]
     if recep_min is not None:
-        q += ' AND CAST(sc."idx__RECEPTION" AS NUMERIC) >= :recep_min'
-        params["recep_min"] = recep_min
+        df = df[df["idx__RECEPTION"] >= recep_min]
     if recep_max is not None:
-        q += ' AND CAST(sc."idx__RECEPTION" AS NUMERIC) <= :recep_max'
-        params["recep_max"] = recep_max
-        
+        df = df[df["idx__RECEPTION"] <= recep_max]
     if grav_min is not None:
-        q += ' AND CAST(sc."idx__GRAVITY" AS NUMERIC) >= :grav_min'
-        params["grav_min"] = grav_min
+        df = df[df["idx__GRAVITY"] >= grav_min]
     if grav_max is not None:
-        q += ' AND CAST(sc."idx__GRAVITY" AS NUMERIC) <= :grav_max'
-        params["grav_max"] = grav_max
-        
-    q += ' ORDER BY (COALESCE(sc."idx__PROGRESSION",0) + COALESCE(sc."idx__DANGEROUSNESS",0) + COALESCE(sc."idx__RECEPTION",0) + COALESCE(sc."idx__GRAVITY",0)) / 4 DESC'
-    
-    rows = [dict(r._mapping) for r in db.execute(text(q), params)]
-    return rows
+        df = df[df["idx__GRAVITY"] <= grav_max]
 
-@app.get("/debug/")
-def debug_database(db: Session = Depends(database.get_db)):
-    """
-    Utility endpoint to view the exact structure of a row
-    directly from the database.
-    """
-    try:
-        team_row = db.execute(text("SELECT * FROM teams LIMIT 1")).fetchone()
-        player_row = db.execute(text("SELECT * FROM player_profiles LIMIT 1")).fetchone()
-        
-        return {
-            "status": "success",
-            "sample_team": dict(team_row._mapping) if team_row else None,
-            "sample_player": dict(player_row._mapping) if player_row else None
-        }
-    except Exception as e:
-        return {"status": "error", "message": str(e)}
+    avg = df[["idx__PROGRESSION", "idx__DANGEROUSNESS", "idx__RECEPTION", "idx__GRAVITY"]].mean(axis=1)
+    df = df.assign(_avg=avg).sort_values("_avg", ascending=False)
+
+    cols = ["player_name", "source_team_name", "player_id", "primary_role", "macro_role",
+            "minutes_played", "idx__PROGRESSION", "idx__DANGEROUSNESS", "idx__RECEPTION",
+            "idx__GRAVITY", "DQ_index", "birth_country", "market_value_euros"]
+    cols = [c for c in cols if c in df.columns]
+    out = df[cols].rename(columns={
+        "player_name": "player", "source_team_name": "team",
+    })
+    out = out.assign(nation=out.get("birth_country", out["team"]))
+    return [row_to_dict(r) for _, r in out.iterrows()]
+
+
+# ── debug ────────────────────────────────────────────────────────────────────
+@router.get("/debug")
+@router.get("/debug/")
+def debug():
+    return {
+        "status": "success",
+        "pool_size": len(POOL),
+        "sample_player": row_to_dict(POOL.iloc[0][["player_name", "source_team_name", "macro_role"]]),
+    }
+
+
+# Mount all endpoints under both root / and prefix /api
+app.include_router(router)
+app.include_router(router, prefix="/api")

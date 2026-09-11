@@ -1,73 +1,30 @@
-# React + TypeScript + Vite
+# Frontend Application (Wyscout Integration)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> 🔗 **Corresponding README in original repository:** [Contextual-Football-Scouting/webapp/README.md](https://github.com/ArMat-Analytics/Contextual-Football-Scouting/blob/main/webapp/README.md)
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Changes in this Fork
 
-## React Compiler
+This directory contains the React 19 + Vite dashboard adapted for the **Wyscout Integration**:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+1. **Interface & Metric Updates**:
+   - **Home Page**: Updated with fork attribution, direct link to the original repository, and a concise summary of the Wyscout proxy integration.
+   - **Player Cards & Radars**: Visualizes Wyscout proxy indices for Space Control (H1) and Decision Quality (H2), alongside raw seasonal metrics.
+   - **Similar Players (H4)**: Displays the 8-axis stylistic DNA radar overlays and look-alikes.
+   - **Removed Legacy Features**: Removed H3 Off-Ball Movement tabs and sections (which required tracking coordinates).
 
-## Expanding the ESLint configuration
+2. **Standalone Client Architecture**:
+   - Built on React 19, TypeScript, Tailwind CSS, and Recharts.
+   - Operates completely decoupled from external cloud databases, fetching directly from the local FastAPI in-memory backend.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Quick Start
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+The frontend will run on `http://localhost:5173`.

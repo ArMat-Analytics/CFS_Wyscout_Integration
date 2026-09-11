@@ -2,6 +2,19 @@
 // Maps national team names to ISO codes and fetches the SVG flag from flagcdn.
 
 const NAME_TO_CODE: Record<string, string> = {
+  // Americas
+  'Brazil': 'br', 'Argentina': 'ar', 'Uruguay': 'uy', 'Colombia': 'co',
+  'Paraguay': 'py', 'Chile': 'cl', 'Peru': 'pe', 'Ecuador': 'ec',
+  'Venezuela': 've', 'Bolivia': 'bo', 'Guyana': 'gy', 'Panama': 'pa',
+  'United States': 'us', 'USA': 'us', 'Mexico': 'mx',
+  // Africa & Asia
+  'Cape Verde Islands': 'cv', 'Cape Verde': 'cv', 'Angola': 'ao', 'Cameroon': 'cm',
+  'Ghana': 'gh', 'Nigeria': 'ng', 'Senegal': 'sn', 'Guinea': 'gn',
+  'Guinea-Bissau': 'gw', 'Congo DR': 'cd', 'Democratic Republic of the Congo': 'cd',
+  'Morocco': 'ma', 'São Tomé e Príncipe': 'st', 'Sao Tome and Principe': 'st',
+  'Japan': 'jp', 'Korea Republic': 'kr', 'South Korea': 'kr', 'Lebanon': 'lb',
+  // Europe
+  'Monaco': 'mc', 'Bulgaria': 'bg',
   // Group A
   'Germany': 'de', 'Scotland': 'gb-sct', 'Hungary': 'hu', 'Switzerland': 'ch',
   // Group B
@@ -31,9 +44,23 @@ const NAME_TO_CODE: Record<string, string> = {
 /** Returns the FlagCDN SVG URL for a given national team name. */
 export function getFlagUrl(teamName?: string | null): string | null {
   if (!teamName) return null;
-  const code = NAME_TO_CODE[teamName];
+  const cleanName = teamName.split(',')[0].trim();
+  const code = NAME_TO_CODE[cleanName] ?? NAME_TO_CODE[teamName];
   if (!code) return null;
   return `https://flagcdn.com/${code}.svg`;
+}
+
+const BALL_EMOJIS = ['🔴', '🔵', '🟢', '🟡', '🟣', '🟠', '🟤', '⚪'];
+
+/** Returns a deterministic colored ball emoji for a given team name. */
+export function getTeamBallEmoji(teamName?: string | null): string {
+  if (!teamName) return '⚪';
+  let hash = 0;
+  for (let i = 0; i < teamName.length; i++) {
+    hash = (hash << 5) - hash + teamName.charCodeAt(i);
+    hash |= 0;
+  }
+  return BALL_EMOJIS[Math.abs(hash) % BALL_EMOJIS.length];
 }
 
 // ── Shared stat definitions ──────────────────────────────────────────────────
@@ -67,9 +94,11 @@ export interface PlayerStats {
   player_id: number;
   player_name: string;
   source_team_name?: string;
+  birth_country?: string;
   primary_role?: string;
   age?: number;
   preferred_foot?: string;
+  market_value_euros?: string;
   market_value_before_euros?: string;
   market_value_after_euros?: string;
   minutes_played?: number;
@@ -110,7 +139,7 @@ export function parseMarketValueToNum(val?: string | null): number {
   return num;
 }
 
-/** Returns ▲ or ▼ depending on whether the post-euro value is higher or lower than pre-euro */
+/** Returns ▲ or ▼ depending on whether the updated market value is higher or lower than base value */
 export function getMarketTrendArrow(before?: string | null, after?: string | null): string {
   if (!before || !after) return '';
   const numBefore = parseMarketValueToNum(before);
