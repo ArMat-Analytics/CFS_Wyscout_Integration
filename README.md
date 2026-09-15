@@ -1,7 +1,5 @@
 <div align="center">
 
-<img src="docs/barca-innovation-hub-logo.jpg" alt="Contextual Football Scouting" width="160"/>
-
 # Contextual Football Scouting
 
 [![CI](https://img.shields.io/github/actions/workflow/status/ArMat-Analytics/Contextual-Football-Scouting/ci.yml?branch=main&label=CI&logo=github)](https://github.com/ArMat-Analytics/Contextual-Football-Scouting/actions/workflows/ci.yml)
